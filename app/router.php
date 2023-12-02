@@ -7,6 +7,9 @@ class Router
         $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 
         switch ($page) {
+            case '':
+            case 'home':
+
             case 'users':
                 $controller = new UserController();
                 if (isset($_GET['action'])) {
