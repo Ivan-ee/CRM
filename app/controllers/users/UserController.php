@@ -29,5 +29,12 @@ class UserController{
         }
         header("Location: index.php?page=users");
     }
+
+    public function delete() {
+        $userModel = new User();
+        $userModel->delete($_GET['id']);
+
+        header("Location: index.php?page=users");
+    }
 }
 

@@ -29,8 +29,8 @@ ob_start();
     <td><?php echo $user['created_at']; ?></td>
     <td><?php echo $user['created_at']; ?></td>
     <td>
-        <a href="index.php?page=user&action=edit&id=<?php echo $user['id']; ?>" >Edit</a>
-        <a href="index.php?page=user&action=delete&id=<?php echo $user['id']; ?>" >Delete</a>
+        <a href="index.php?page=users&action=edit&id=<?php echo $user['id']; ?>" >Edit</a>
+        <a href="index.php?page=users&action=delete&id=<?php echo $user['id']; ?>" >Delete</a>
     </td>
 </tr>
 <?php endforeach; ?>

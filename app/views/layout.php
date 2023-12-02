@@ -6,7 +6,7 @@
 <body>
 <div>
     <nav>
-        <a href="#">CRM</a>
+        <a href="index.php">CRM</a>
         <div>
             <ul>
                 <li>
