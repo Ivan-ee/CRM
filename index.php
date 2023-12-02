@@ -3,11 +3,11 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once 'app/model/database.php';
-require_once 'app/model/user.php';
+require_once 'app/models/Database.php';
+require_once 'app/models/User.php';
 
-require_once 'app/controller/user/authController.php';
-require_once 'app/controller/user/userController.php';
+require_once 'app/controllers/users/AuthController.php';
+require_once 'app/controllers/users/UserController.php';
 
 require_once 'app/router.php';
 

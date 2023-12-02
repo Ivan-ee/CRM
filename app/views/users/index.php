@@ -7,7 +7,7 @@ ob_start();
 ?>
 
 <h1>User list</h1>
-<a href="#">Create User</a>
+<a href="index.php?page=users&action=create">Create User</a>
 <table class="table">
 
 <thead>
@@ -41,6 +41,6 @@ ob_start();
 <?php
 $content = ob_get_clean();
 
-include 'app/view/layout.php';
+include 'app/views/layout.php';
 
 ?>

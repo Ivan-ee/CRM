@@ -11,8 +11,8 @@ class Database{
     private function __construct() {
         $this->conn = new mysqli($this->host, $this->user, $this->password, $this->name);
 
-        if ($this->conn->coonect_error){
-            die('Ошибка соединения: ' . $this->conn->coonect_error);
+        if ($this->conn->connect_error){
+            die('Ошибка соединения: ' . $this->conn->connect_error);
         }
     }
 

@@ -10,7 +10,7 @@
         <div>
             <ul>
                 <li>
-                    <a href="#">Users</a>
+                    <a href="index.php?page=users">Users</a>
                 </li>
             </ul>
         </div>
