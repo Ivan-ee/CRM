@@ -7,71 +7,105 @@ class User
     public function __construct()
     {
         $this->database = Database::getInstance()->getConnection();
+
+        try {
+            $result = $this->database->query("SELECT 1 FROM `users` LIMIT 1");
+        } catch (PDOException $e){
+            $this->createTable();
+        }
+    }
+
+    public function createTable()
+    {
+        $query = "CREATE TABLE IF NOT EXISTS `users` (
+    `id` INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `login` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `is_admin` TINYINT(1) NOT NULL DEFAULT '0',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )";
+
+        try {
+            $this->database->exec($query);
+            return true;
+        } catch (PDOException $e){
+            return false;
+        }
     }
 
     public function readAll()
     {
-        $result = $this->database->query("SELECT * FROM users");
+        try {
+            $stmt = $this->database->query("SELECT * FROM `users`");
 
-        $users = [];
-        while ($row = $result->fetch_assoc()) {
-            $users[] = $row;
+            $users = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $users[] = $row;
+            }
+            return $users;
+        } catch (PDOException $e) {
+            return false;
         }
-
-        return $users;
     }
 
-    public function create($data) {
+    public function create($data)
+    {
         $login = $data['login'];
         $password = password_hash($data['password'], PASSWORD_DEFAULT);
         $admin = !empty($data['admin']) && $data['admin'] !== 0 ? 1 : 0;
         $created_at = date('Y-m-d H:i:s');
 
-        $stmt = $this->database->prepare("INSERT INTO users (login, password, is_admin, created_at) VALUE (?,?,?,?)");
-        $stmt->bind_param("ssis", $login, $password, $admin, $created_at);
+        $query = "INSERT INTO users (login, password, is_admin, created_at) VALUE (?,?,?,?)";
 
-        if ($stmt->execute()){
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$login, $password, $admin, $created_at]);
             return true;
-        }
-        else{
+        } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function read($id) {
-        $stmt = $this->database->prepare("SELECT * FROM users WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
+    public function read($id)
+    {
+        $query = "SELECT * FROM users WHERE id = ?";
 
-        $result = $stmt->get_result();
-        $user = $result->fetch_assoc();
-
-        return $user;
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$id]);
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $res;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         $login = $data['login'];
         $admin = !empty($data['admin']) && $data['admin'] !== 0 ? 1 : 0;
 
-        $stmt = $this->database->prepare("UPDATE users SET login = ?, is_admin = ? WHERE id = ?");
-        $stmt->bind_param("ssi", $login, $admin, $id);
+        $query = "UPDATE users SET login = ?, is_admin = ? WHERE id = ?";
 
-        if ($stmt->execute()){
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$login, $admin, $id]);
             return true;
-        }
-        else{
+        } catch (PDOException $e) {
             return false;
         }
+
     }
 
-    public function delete($id) {
-        $stmt = $this->database->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->bind_param("i", $id);
+    public function delete($id)
+    {
+        $query = "DELETE FROM users WHERE id = ?";
 
-        if ($stmt->execute()){
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$id]);
             return true;
-        }
-        else{
+        } catch (PDOException $e) {
             return false;
         }
     }
