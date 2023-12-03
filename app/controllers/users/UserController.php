@@ -28,7 +28,7 @@ class UserController{
             $data = [
                 'username' => $_POST['username'],
                 'email' => $_POST['email'],
-                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'password' => $password,
                 'role' => 1,
             ];
 
