@@ -38,6 +38,32 @@ class User
         }
     }
 
+    public function read($id) {
+        $stmt = $this->database->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+
+        return $user;
+    }
+
+    public function update($id, $data) {
+        $login = $data['login'];
+        $admin = !empty($data['admin']) && $data['admin'] !== 0 ? 1 : 0;
+
+        $stmt = $this->database->prepare("UPDATE users SET login = ?, is_admin = ? WHERE id = ?");
+        $stmt->bind_param("ssi", $login, $admin, $id);
+
+        if ($stmt->execute()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function delete($id) {
         $stmt = $this->database->prepare("DELETE FROM users WHERE id = ?");
         $stmt->bind_param("i", $id);
