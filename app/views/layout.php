@@ -13,6 +13,9 @@
                     <a href="index.php?page=users">Users</a>
                 </li>
                 <li>
+                    <a href="index.php?page=pages">Pages</a>
+                </li>
+                <li>
                     <a href="index.php?page=roles">All Roles</a>
                 </li>
                 <li>
