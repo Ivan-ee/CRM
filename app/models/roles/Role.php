@@ -33,11 +33,14 @@ class Role
 
     public function getAllRoles()
     {
-        $query = "SELECT * FROM roles";
-
         try {
-            $stmt = $this->database->prepare($query);
-            $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->database->query("SELECT * FROM roles");
+
+            $roles = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $roles[] = $row;
+            }
+
             return $roles;
         } catch (PDOException $e) {
             return false;
@@ -60,7 +63,7 @@ class Role
 
     public function createRole($role_name, $role_description)
     {
-        $query = "INSERT INTO roles (role_name role_description) VALUES (?,?)";
+        $query = "INSERT INTO roles (role_name, role_description) VALUES (?,?)";
 
         try {
             $stmt = $this->database->prepare($query);

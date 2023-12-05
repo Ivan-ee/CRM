@@ -59,6 +59,7 @@ class Router
                 } else {
                     $controller->index();
                 }
+                break;
 
             case 'register':
                 $controller = new AuthController();

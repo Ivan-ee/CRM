@@ -16,7 +16,7 @@
                     <a href="index.php?page=roles">All Roles</a>
                 </li>
                 <li>
-                    <a href="index.php?page=roles&action=create">Logout</a>
+                    <a href="index.php?page=roles&action=create">Create Role</a>
                 </li>
                 <li>
                     <a href="index.php?page=register">Register</a>

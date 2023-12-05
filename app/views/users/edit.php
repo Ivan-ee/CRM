@@ -10,14 +10,19 @@ ob_start();
 
 <form method="post" action="index.php?page=users&action=update&id=<?php echo $user['id']; ?>">
     <div>
-        <label for="login">login</label>
-        <input type="text" id="login" name="login" value="<?php echo $user['login']; ?>" required>
+        <label for="username">username</label>
+        <input type="text" id="username" name="username" value="<?php echo $user['username']; ?>" required>
     </div>
     <div>
-        <label for="admin">Admin</label>
-        <select id="admin" name="admin">
-            <option value="0" <?php if (!$user['is_admin']) {echo 'selected';} ?> >No</option>
-            <option value="1" <?php if ($user['is_admin']) {echo 'selected';} ?> >YeS</option>
+        <label for="email">email</label>
+        <input type="text" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+    </div>
+    <div>
+        <label for="role">role</label>
+        <select id="role" name="role">
+            <?php foreach ($roles as $role): ?>
+            <option value="<?php echo $role['id']; ?>" <?php echo $user['role'] == $role['id'] ? 'selected' : ''; ?> ><?= $role['name'] ?></option>
+            <?php endforeach; ?>
         </select>
     </div>
     <button type="submit">Update</button>

@@ -50,7 +50,7 @@ class Auth
     {
         $created_at = date('Y-m-d H:i:s');
 
-        $query = "INSERT INTO users (username, email, password, created_at) VALUES (?,?,?,?,?)";
+        $query = "INSERT INTO users (username, email, password, created_at) VALUES (?,?,?,?)";
 
         try {
             $stmt = $this->database->prepare($query);

@@ -1,6 +1,7 @@
 <?php
 
 require_once 'app/models/User.php';
+require_once 'app/models/roles/Role.php';
 
 class UserController{
     public function index() {
@@ -16,6 +17,8 @@ class UserController{
 
     public function store() {
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['confirm_password']) && isset($_POST['email'])){
+            $username = $_POST['username'];
+            $email = $_POST['email'];
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
 
@@ -26,8 +29,8 @@ class UserController{
 
             $userModel = new User();
             $data = [
-                'username' => $_POST['username'],
-                'email' => $_POST['email'],
+                'username' => $username,
+                'email' => $email,
                 'password' => $password,
                 'role' => 1,
             ];
@@ -40,6 +43,9 @@ class UserController{
     public function edit() {
         $userModel = new User();
         $user = $userModel->read($_GET['id']);
+
+        $roleModel = new Role();
+        $roles = $roleModel->getAllRoles($_GET['id']);
 
         include 'app/views/users/edit.php';
     }

@@ -4,14 +4,14 @@ require_once 'app/models/roles/Role.php';
 
 class RoleController{
     public function index() {
-        $userModel = new User();
-        $users = $userModel->readAll();
+        $userModel = new Role();
+        $roles = $userModel->getAllRoles();
 
-        include 'app/views/users/index.php';
+        include 'app/views/roles/index.php';
     }
 
     public function create() {
-        include 'app/views/users/create.php';
+        include 'app/views/roles/create.php';
     }
 
     public function store() {
