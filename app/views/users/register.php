@@ -1,6 +1,6 @@
 <?php
 
-$title = 'Register User';
+$title = 'Register UserModel';
 
 ob_start();
 

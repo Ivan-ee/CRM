@@ -1,6 +1,6 @@
 <?php
 
-require_once 'app/models/Auth.php';
+require_once 'app/models/AuthModel.php';
 
 class AuthController
 {
@@ -20,7 +20,7 @@ class AuthController
                 return;
             }
 
-            $authModel = new Auth();
+            $authModel = new AuthModel();
             $data = [
                 'username' => $_POST['username'],
                 'email' => $_POST['email'],
@@ -39,7 +39,7 @@ class AuthController
 
     public function authenticate()
     {
-        $authModel = new Auth();
+        $authModel = new AuthModel();
 
         if (isset($_POST['email']) && isset($_POST['password'])) {
             $email = $_POST['email'];
