@@ -9,7 +9,7 @@ class PageModel
         $this->database = Database::getInstance()->getConnection();
 
         try {
-            $result = $this->database->query("SELECT 1 FROM `roles` LIMIT 1");
+            $result = $this->database->query("SELECT 1 FROM `pages` LIMIT 1");
         } catch (PDOException $e) {
             $this->createTable();
         }
@@ -17,78 +17,82 @@ class PageModel
 
     public function createTable()
     {
-        $roleTableQuery = "CREATE TABLE IF NOT EXISTS `roles` (
-    `id` INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `role_name` VARCHAR(255) NOT NULL,
-    `role_description` TEXT
-)";
+        $pageTableQuery = "CREATE TABLE IF NOT EXISTS `pages` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `title` VARCHAR(255) NOT NULL,
+            `slug` VARCHAR(255) NOT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+          ";
 
         try {
-            $this->database->exec($roleTableQuery);
+            $this->database->exec($pageTableQuery);
             return true;
         } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function getAllRoles()
+    public function getAllPages()
     {
         try {
-            $stmt = $this->database->query("SELECT * FROM roles");
+            $stmt = $this->database->query("SELECT * FROM pages");
 
-            $roles = [];
+            $pages = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $roles[] = $row;
+                $pages[] = $row;
             }
 
-            return $roles;
+            return $pages;
         } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function getRoleById($id)
+    public function getPageById($id)
     {
-        $query = "SELECT * FROM roles WHERE id = ?";
+        $query = "SELECT * FROM pages WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
-            $role = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $role ? $role : false;
+            $page = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $page ? $page : false;
         } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function createRole($role_name, $role_description)
+    public function createPage($title, $slug)
     {
-        $query = "INSERT INTO roles (role_name, role_description) VALUES (?,?)";
+        $query = "INSERT INTO pages (title, slug) VALUES (?,?)";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$role_name, $role_description]);
+            $stmt->execute([$title, $slug]);
             return true;
         } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function updateRole($id, $role_name, $role_description)
+    public function updatePage($id, $title, $slug)
     {
-        $query = "UPDATE roles SET role_name = ?, role_description = ? WHERE id = ?";
+        $query = "UPDATE pages SET title = ?, slug = ? WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$role_name, $role_description, $id]);
+            $stmt->execute([$title, $slug, $id]);
             return true;
         } catch (PDOException $e) {
             return false;
         }
     }
 
-    public function deleteRole($id) {
-        $query = " DELETE FROM roles WHERE id = ?";
+    public function deletePage($id)
+    {
+        $query = " DELETE FROM pages WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);

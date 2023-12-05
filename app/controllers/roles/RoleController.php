@@ -58,7 +58,7 @@ class RoleController{
 
     public function delete() {
         $roleModel = new RoleModal();
-        $roleModel->deleteRoel($_GET['id']);
+        $roleModel->deleteRole($_GET['id']);
 
         header("Location: index.php?page=roles");
     }
