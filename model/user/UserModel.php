@@ -2,6 +2,8 @@
 
 namespace model\user;
 
+use model\database\Database;
+
 class UserModel
 {
     private $database;
@@ -11,38 +13,20 @@ class UserModel
         $this->database = Database::getInstance()->getConnection();
 
         try {
-            $result = $this->database->query("SELECT 1 FROM `user` LIMIT 1");
-        } catch (PDOException $e) {
+            $result = $this->database->query("SELECT 1 FROM `users` LIMIT 1");
+        } catch (\PDOException $e) {
             $this->createTable();
         }
     }
 
-//    public function createTable()
-//    {
-//        $query = "CREATE TABLE IF NOT EXISTS `user` (
-//    `id` INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//    `login` VARCHAR(255) NOT NULL,
-//    `password` VARCHAR(255) NOT NULL,
-//    `is_admin` TINYINT(1) NOT NULL DEFAULT '0',
-//    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-//    )";
-//
-//        try {
-//            $this->database->exec($query);
-//            return true;
-//        } catch (PDOException $e) {
-//            return false;
-//        }
-//    }
-
     public function createTable()
     {
-        $roleTableQuery = "CREATE TABLE IF NOT EXISTS `role` (
+        $roleTableQuery = "CREATE TABLE IF NOT EXISTS `roles` (
     `id` INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `role_name` VARCHAR(255) NOT NULL,
     `role_description` TEXT
 )";
-        $userTableQuery = "CREATE TABLE IF NOT EXISTS `user` (
+        $userTableQuery = "CREATE TABLE IF NOT EXISTS `users` (
             `id` INT(6) NOT NULL AUTO_INCREMENT,
             `username` VARCHAR(255) NOT NULL,
             `email` VARCHAR(255) NOT NULL,
@@ -61,7 +45,7 @@ class UserModel
             $this->database->exec($roleTableQuery);
             $this->database->exec($userTableQuery);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -69,48 +53,43 @@ class UserModel
     public function readAll()
     {
         try {
-            $stmt = $this->database->query("SELECT * FROM `user`");
+            $stmt = $this->database->query("SELECT * FROM `users`");
 
             $users = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $users[] = $row;
             }
             return $users;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
-    public function create($data)
+    public function create($username, $email, $password)
     {
-        $username = $data['$username'];
-        $email = $data['email'];
-        $password = $data['password'];
-        $role = $data['$role'];
-
         $created_at = date('Y-m-d H:i:s');
 
-        $query = "INSERT INTO user (username, email, password, role, created_at) VALUE (?,?,?,?,?)";
+        $query = "INSERT INTO users (username, email, password, created_at) VALUES (?,?,?,?)";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT), $role, $created_at]);
+            $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT), $created_at]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function read($id)
     {
-        $query = "SELECT * FROM user WHERE id = ?";
+        $query = "SELECT * FROM users WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            $res = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $res;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -118,32 +97,31 @@ class UserModel
     public function update($id, $data)
     {
         $username = $data['username'];
-        $email = $data['email'];
         $admin = !empty($data['admin']) && $data['admin'] !== 0 ? 1 : 0;
+        $email = $data['email'];
         $role = $data['role'];
         $is_active = isset($data['is_active']) ? 1 : 0;
 
-        $query = "UPDATE user SET username = ?, email = ?, is_admin = ?, role = ?, is_active = ? WHERE id = ?";
+        $query = "UPDATE users SET username = ?, email = ?, is_admin = ?, role = ?, is_active = ? WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$username, $email, $admin, $role, $is_active, $id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
-
     }
 
     public function delete($id)
     {
-        $query = "DELETE FROM user WHERE id = ?";
+        $query = "DELETE FROM users WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }

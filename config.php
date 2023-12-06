@@ -13,7 +13,7 @@ function tte($str){
 }
 // config.php
 
-const APP_BASE_PATH = 'CRM';
+const APP_BASE_PATH = 'crm';
 
 const DB_HOST = 'localhost';
 const DB_USER = 'root';

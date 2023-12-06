@@ -8,7 +8,7 @@ ob_start();
 
 
 
-<form method="post" action="index.php?page=users&action=update&id=<?php echo $user['id']; ?>">
+<form method="post" action="//<?= APP_BASE_PATH ?>/users/update/<?php echo $user['id']; ?>">
     <div>
         <label for="username">username</label>
         <input type="text" id="username" name="username" value="<?php echo $user['username']; ?>" required>
@@ -18,13 +18,14 @@ ob_start();
         <input type="text" id="email" name="email" value="<?php echo $user['email']; ?>" required>
     </div>
     <div>
-        <label for="role">role</label>
+        <label for="role" >Role</label>
         <select id="role" name="role">
             <?php foreach ($roles as $role): ?>
-            <option value="<?php echo $role['id']; ?>" <?php echo $user['role'] == $role['id'] ? 'selected' : ''; ?> ><?= $role['name'] ?></option>
+                <option value="<?php echo $role['id']; ?>" <?php echo $user['role'] == $role['id'] ? 'selected' : ''; ?>><?php echo $role['role_name']; ?></option>
             <?php endforeach; ?>
         </select>
     </div>
+
     <button type="submit">Update</button>
 </form>
 

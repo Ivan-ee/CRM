@@ -6,7 +6,7 @@ ob_start();
 
 ?>
 
-<form method="post" action="index.php?page=auth&action=authenticate">
+<form method="post" action="//<?= APP_BASE_PATH ?>/auth/authenticate">
     <div>
         <label for="email">email</label>
         <input type="email" id="email" name="email" required>
@@ -21,7 +21,7 @@ ob_start();
     </div>
     <button type="submit">Войти</button>
 </form>
-<p>Нет аккаунта? <a href="index.php?page=register">Регистрация</a> </p>
+<p>Нет аккаунта? <a href="../users/index.php?page=register">Регистрация</a> </p>
 
 <?php
 

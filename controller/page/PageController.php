@@ -1,10 +1,9 @@
 <?php
 
-namespace controller\pages;
+namespace controller\page;
 
 use model\page\PageModel;
 
-require_once 'model/page/PageModel.php';
 
 class PageController{
     public function index() {

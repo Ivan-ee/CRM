@@ -2,6 +2,8 @@
 
 namespace model\page;
 
+use model\database\Database;
+
 class PageModel
 {
     private $database;
@@ -11,15 +13,15 @@ class PageModel
         $this->database = Database::getInstance()->getConnection();
 
         try {
-            $result = $this->database->query("SELECT 1 FROM `page` LIMIT 1");
-        } catch (PDOException $e) {
+            $result = $this->database->query("SELECT 1 FROM `pages` LIMIT 1");
+        } catch (\PDOException $e) {
             $this->createTable();
         }
     }
 
     public function createTable()
     {
-        $pageTableQuery = "CREATE TABLE IF NOT EXISTS `page` (
+        $pageTableQuery = "CREATE TABLE IF NOT EXISTS `pages` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `title` VARCHAR(255) NOT NULL,
             `slug` VARCHAR(255) NOT NULL,
@@ -31,7 +33,7 @@ class PageModel
         try {
             $this->database->exec($pageTableQuery);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -39,68 +41,68 @@ class PageModel
     public function getAllPages()
     {
         try {
-            $stmt = $this->database->query("SELECT * FROM page");
+            $stmt = $this->database->query("SELECT * FROM pages");
 
             $pages = [];
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $pages[] = $row;
             }
 
             return $pages;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function getPageById($id)
     {
-        $query = "SELECT * FROM page WHERE id = ?";
+        $query = "SELECT * FROM pages WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
-            $page = $stmt->fetch(PDO::FETCH_ASSOC);
+            $page = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $page ? $page : false;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function createPage($title, $slug)
     {
-        $query = "INSERT INTO page (title, slug) VALUES (?,?)";
+        $query = "INSERT INTO pages (title, slug) VALUES (?,?)";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$title, $slug]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function updatePage($id, $title, $slug)
     {
-        $query = "UPDATE page SET title = ?, slug = ? WHERE id = ?";
+        $query = "UPDATE pages SET title = ?, slug = ? WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$title, $slug, $id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function deletePage($id)
     {
-        $query = " DELETE FROM page WHERE id = ?";
+        $query = " DELETE FROM pages WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
             return true;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }

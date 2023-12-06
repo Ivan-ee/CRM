@@ -4,13 +4,11 @@ namespace controller\auth;
 
 use model\auth\AuthModel;
 
-require_once 'model/auth/AuthModel.php';
-
 class AuthController
 {
-    public function rigister()
+    public function index()
     {
-        include 'app/view/users/register.php';
+        include 'app/view/auth/register.php';
     }
 
     public function store()
@@ -33,12 +31,13 @@ class AuthController
 
             $authModel->register($data['username'], $data['email'], $data['password']);
         }
-        header("Location: index.php?page=login");
+        $path = '//' . APP_BASE_PATH . '/auth/login';
+        header("Location: $path");
     }
 
     public function login()
     {
-        include 'app/view/users/login.php';
+        include 'app/view/auth/login.php';
     }
 
     public function authenticate()
@@ -61,6 +60,8 @@ class AuthController
                     setcookie('user_email', $email, time() + (7*24*60*60), '/');
                     setcookie('user_password', $password, time() + (7*24*60*60), '/');
                 }
+
+                echo "Вы успешно вошли";
 
                 header("Location: index.php");
             } else {

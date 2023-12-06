@@ -5,9 +5,6 @@ namespace controller\user;
 use model\role\RoleModal;
 use model\user\UserModel;
 
-require_once 'model/user/UserModel.php';
-require_once 'model/role/RoleModal.php';
-
 class UserController
 {
     public function index()
@@ -26,8 +23,6 @@ class UserController
     public function store()
     {
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['confirm_password']) && isset($_POST['email'])) {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
 
@@ -38,42 +33,45 @@ class UserController
 
             $userModel = new UserModel();
             $data = [
-                'username' => $username,
-                'email' => $email,
-                'password' => $password,
-                'role' => 1,
+                'username' => $_POST['username'],
+                'email' => $_POST['email'],
+                'password' => $_POST['password'],
             ];
 
-            $userModel->create($data);
+            $userModel->create($data['username'], $data['email'], $data['password']);
         }
-        header("Location: index.php?page=user");
+
+        $path = '//' . APP_BASE_PATH . '/users';
+        header("Location: $path");
     }
 
-    public function edit()
+    public function edit($params)
     {
         $userModel = new UserModel();
-        $user = $userModel->read($_GET['id']);
+        $user = $userModel->read($params['id']);
 
         $roleModel = new RoleModal();
-        $roles = $roleModel->getAllRoles($_GET['id']);
+        $roles = $roleModel->getAllRoles();
 
         include 'app/view/users/edit.php';
     }
 
-    public function update()
+    public function update($params)
     {
         $userModel = new UserModel();
-        $userModel->update($_GET['id'], $_POST);
+        $userModel->update($params['id'], $_POST);
 
-        header("Location: index.php?page=user");
+        $path = '//' . APP_BASE_PATH . '/users';
+        header("Location: $path");
     }
 
-    public function delete()
+    public function delete($params)
     {
         $userModel = new UserModel();
-        $userModel->delete($_GET['id']);
+        $userModel->delete($params['id']);
 
-        header("Location: index.php?page=user");
+        $path = '//' . APP_BASE_PATH . '/users';
+        header("Location: $path");
     }
 }
 
