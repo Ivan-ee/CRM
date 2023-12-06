@@ -1,123 +1,58 @@
 <?php
+namespace app;
 
-class Router
-{
-    public function run()
-    {
-        $page = isset($_GET['page']) ? $_GET['page'] : 'home';
+use controller\role\RoleController;
+use controller\user\UserController;
+use controller\pages\PageController;
+use controller\home\HomeController;
+use controller\auth\AuthController;
 
-        switch ($page) {
-            case '':
-            case 'home':
-                $controller = new HomeController();
-                $controller->index();
+class Router {
+
+    private $routes = [
+        '/^\/?$/' => ['controller' => 'home\\HomeController', 'action' => 'index'],
+        '/^\/users(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'user\\UserController'],
+        '/^\/auth(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'auth\\AuthController'],
+        '/^\/roles(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'role\\RoleController'],
+        '/^\/pages(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'page\\PageController'],
+        '/^\/(register|login|authenticate|logout)(\/(?P<action>[a-z]+))?$/' => ['controller' => 'user\\AuthController'],
+        '/^\/todo\/category(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\category\\CategoryController'],
+        '/^\/todo\/tasks(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\tasks\\TaskController'],
+        '/^\/todo\/tasks\/by-tag(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'tasksByTag'],
+        '/^\/todo\/tasks\/update-status(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'updateStatus'],
+        '/^\/todo\/tasks\/task(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'task'],
+        '/^\/quiz(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'quiz\\QuizController'],
+        '/^\/shortlink(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'shortlink\\ShortLinkController'],
+        '/^\/([a-zA-Z0-9-]{6,10})$/' => ['controller' => 'shortlink\\ShortLinkController', 'action' => 'redirect'],
+    ];
+
+    public function run() {
+        $uri = $_SERVER['REQUEST_URI'];
+        $controller = null;
+        $action = null;
+        $params = null;
+
+        foreach ($this->routes as $pattern => $route) {
+            if (preg_match($pattern, $uri, $matches)) {
+                $controller = "controller\\" . $route['controller'];
+                $action = $route['action'] ?? $matches['action'] ?? 'index';
+                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
                 break;
-            case 'users':
-                $controller = new UserController();
-                if (isset($_GET['action'])) {
-                    switch ($_GET['action']) {
-                        case 'create':
-                            $controller->create();
-                            break;
-                        case 'store':
-                            $controller->store();
-                            break;
-                        case 'delete':
-                            $controller->delete();
-                            break;
-                        case 'edit':
-                            $controller->edit();
-                            break;
-                        case 'update':
-                            $controller->update();
-                            break;
-                    }
-                } else {
-                    $controller->index();
-                }
-                break;
-            case 'roles':
-                $controller = new RoleController();
-                if (isset($_GET['action'])) {
-                    switch ($_GET['action']) {
-                        case 'create':
-                            $controller->create();
-                            break;
-                        case 'store':
-                            $controller->store();
-                            break;
-                        case 'delete':
-                            $controller->delete();
-                            break;
-                        case 'edit':
-                            $controller->edit($_GET['id']);
-                            break;
-                        case 'update':
-                            $controller->update();
-                            break;
-                    }
-                } else {
-                    $controller->index();
-                }
-                break;
-            case 'pages':
-                $controller = new PageController();
-                if (isset($_GET['action'])) {
-                    switch ($_GET['action']) {
-                        case 'create':
-                            $controller->create();
-                            break;
-                        case 'store':
-                            $controller->store();
-                            break;
-                        case 'delete':
-                            $controller->delete();
-                            break;
-                        case 'edit':
-                            $controller->edit($_GET['id']);
-                            break;
-                        case 'update':
-                            $controller->update();
-                            break;
-                    }
-                } else {
-                    $controller->index();
-                }
-                break;
-            case 'register':
-                $controller = new AuthController();
-                $controller->rigister();
-                break;
-            case 'login':
-                $controller = new AuthController();
-                $controller->login();
-                break;
-            case 'authenticate':
-                $controller = new AuthController();
-                $controller->authenticate();
-                break;
-            case 'logout':
-                $controller = new AuthController();
-                $controller->logout();
-                break;
-            case 'auth':
-                $controller = new AuthController();
-                if (isset($_GET['action'])) {
-                    switch ($_GET['action']) {
-                        case 'store':
-                            $controller->store();
-                            break;
-                        case 'authenticate':
-                            $controller->authenticate();
-                            break;
-                    }
-                } else {
-                    $controller->login();
-                }
-                break;
-            default:
-                http_response_code(404);
-                echo 'Страница не найдена';
+            }
         }
+
+        if (!$controller) {
+            http_response_code(404);
+            echo "Page not found!!!!!";
+            return;
+        }
+
+        $controllerInstance = new $controller();
+        if (!method_exists($controllerInstance, $action)) {
+            http_response_code(404);
+            echo "Action not found!";
+            return;
+        }
+        call_user_func_array([$controllerInstance, $action], [$params]);
     }
 }
