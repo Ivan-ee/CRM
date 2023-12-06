@@ -88,6 +88,7 @@ class PageModel
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$title, $slug, $id]);
+
             return true;
         } catch (\PDOException $e) {
             return false;

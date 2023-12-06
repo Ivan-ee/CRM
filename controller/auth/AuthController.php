@@ -31,6 +31,7 @@ class AuthController
 
             $authModel->register($data['username'], $data['email'], $data['password']);
         }
+
         $path = '//' . APP_BASE_PATH . '/auth/login';
         header("Location: $path");
     }
@@ -55,6 +56,7 @@ class AuthController
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_role'] = $user['role'];
+                $_SESSION['user_email'] = $user['email'];
 
                 if ($remember == 'on'){
                     setcookie('user_email', $email, time() + (7*24*60*60), '/');
@@ -63,7 +65,8 @@ class AuthController
 
                 echo "Вы успешно вошли";
 
-                header("Location: index.php");
+                $path = '//' . APP_BASE_PATH ;
+                header("Location: $path");
             } else {
                 echo "Неверный пароль или почта.";
             }

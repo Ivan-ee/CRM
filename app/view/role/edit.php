@@ -6,7 +6,7 @@ ob_start();
 
 ?>
 
-<form method="post" action="index.php?page=roles&action=update">
+<form method="post" action="//<?= APP_BASE_PATH ?>/role/update/<?php echo $role['id']; ?>">
     <input type="hidden" name="id" value="<?= $role['id'] ?>">
     <div>
         <label for="role_name">Role_name</label>

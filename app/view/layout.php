@@ -10,16 +10,16 @@
         <div>
             <ul>
                 <li>
-                    <a href="//<?= APP_BASE_PATH ?>/users">Users</a>
+                    <a href="//<?= APP_BASE_PATH ?>/user">Users</a>
                 </li>
                 <li>
-                    <a href="//<?= APP_BASE_PATH ?>/pages">Pages</a>
+                    <a href="//<?= APP_BASE_PATH ?>/page">Pages</a>
                 </li>
                 <li>
-                    <a href="//<?= APP_BASE_PATH ?>/roles">All Roles</a>
+                    <a href="//<?= APP_BASE_PATH ?>/role">All Roles</a>
                 </li>
                 <li>
-                    <a href="//<?= APP_BASE_PATH ?>/roles/create">Create Role</a>
+                    <a href="//<?= APP_BASE_PATH ?>/role/create">Create Role</a>
                 </li>
                 <li>
                     <a href="//<?= APP_BASE_PATH ?>/register">Register</a>

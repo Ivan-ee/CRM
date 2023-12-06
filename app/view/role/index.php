@@ -25,8 +25,8 @@ ob_start();
                 <td><?php echo $role['role_name']; ?></td>
                 <td><?php echo $role['role_description']; ?></td>
                 <td>
-                    <a href="index.php?page=roles&action=edit&id=<?php echo $role['id']; ?>" >Edit</a>
-                    <a href="index.php?page=users&action=delete&id=<?php echo $role['id']; ?>" >Delete</a>
+                    <a href="//<?= APP_BASE_PATH ?>/role/edit/<?php echo $role['id']; ?>" >Edit</a>
+                    <a href="//<?= APP_BASE_PATH ?>/role/delete/<?php echo $role['id']; ?>">Delete</a>
                 </td>
             </tr>
         <?php endforeach; ?>

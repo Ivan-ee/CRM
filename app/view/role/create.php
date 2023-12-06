@@ -6,7 +6,7 @@ ob_start();
 
 ?>
 
-<form method="post" action="index.php?page=roles&action=store">
+<form method="post" action="//<?= APP_BASE_PATH ?>/role/store">
     <div>
         <label for="role_name">Role_name</label>
         <input type="text" id="role_name" name="role_name" required>

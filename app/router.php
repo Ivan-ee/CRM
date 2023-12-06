@@ -12,10 +12,10 @@ class Router {
 
     private $routes = [
         '/^\/?$/' => ['controller' => 'home\\HomeController', 'action' => 'index'],
-        '/^\/users(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'user\\UserController'],
+        '/^\/user(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'user\\UserController'],
         '/^\/auth(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'auth\\AuthController'],
-        '/^\/roles(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'role\\RoleController'],
-        '/^\/pages(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'page\\PageController'],
+        '/^\/role(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'role\\RoleController'],
+        '/^\/page(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'page\\PageController'],
         '/^\/(register|login|authenticate|logout)(\/(?P<action>[a-z]+))?$/' => ['controller' => 'auth\\AuthController'],
         '/^\/todo\/category(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\category\\CategoryController'],
         '/^\/todo\/tasks(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\tasks\\TaskController'],
@@ -38,9 +38,7 @@ class Router {
                 $controller = "controller\\" . $route['controller'];
                 $action = $route['action'] ?? $matches['action'] ?? 'index';
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-                // После строки $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-                var_dump($uri, $controller, $action, $params);
-
+                var_dump($params);
                 break;
             }
         }

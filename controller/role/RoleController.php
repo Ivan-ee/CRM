@@ -2,23 +2,23 @@
 
 namespace controller\role;
 
-use model\role\RoleModal;
+use model\role\RoleModel;
 
-require_once 'model/role/RoleModal.php';
+require_once 'model/role/RoleModel.php';
 
 class RoleController
 {
     public function index()
     {
-        $userModel = new RoleModal();
+        $userModel = new RoleModel();
         $roles = $userModel->getAllRoles();
 
-        include 'app/view/roles/index.php';
+        include 'app/view/role/index.php';
     }
 
     public function create()
     {
-        include 'app/view/roles/create.php';
+        include 'app/view/role/create.php';
     }
 
     public function store()
@@ -32,46 +32,50 @@ class RoleController
                 return;
             }
 
-            $roleModel = new RoleModal();
+            $roleModel = new RoleModel();
             $roleModel->createRole($role_name, $role_description);
         }
-        header("Location: index.php?page=role");
+
+        $path = '//' . APP_BASE_PATH . '/role';
+        header("Location: $path");
     }
 
-    public function edit($id)
+    public function edit($params)
     {
-        $roleModel = new RoleModal();
-        $role = $roleModel->getRoleById($id);
+        $roleModel = new RoleModel();
+        $role = $roleModel->getRoleById($params['id']);
 
         if (!$role) {
             echo "Роль не найдена.";
             return;
         }
 
-        include 'app/view/roles/edit.php';
+        include 'app/view/role/edit.php';
     }
 
-    public function update()
+    public function update($params)
     {
-        if (isset($_POST['id']) && isset($_POST['role_name']) && isset($_POST['role_description'])) {
-            $id = $_POST['id'];
+        if (isset($params['id']) && isset($_POST['role_name']) && isset($_POST['role_description'])) {
+            $id = $params['id'];
             $role_name = $_POST['role_name'];
             $role_description = $_POST['role_description'];
 
 
-            $roleModel = new RoleModal();
+            $roleModel = new RoleModel();
             $roleModel->updateRole($id, $role_name, $role_description);
         }
 
-        header("Location: index.php?page=role");
+        $path = '//' . APP_BASE_PATH . '/role';
+        header("Location: $path");
     }
 
-    public function delete()
+    public function delete($params)
     {
-        $roleModel = new RoleModal();
-        $roleModel->deleteRole($_GET['id']);
+        $roleModel = new RoleModel();
+        $roleModel->deleteRole($params['id']);
 
-        header("Location: index.php?page=role");
+        $path = '//' . APP_BASE_PATH . '/role';
+        header("Location: $path");
     }
 }
 

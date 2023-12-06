@@ -21,7 +21,7 @@ ob_start();
     </div>
     <button type="submit">Войти</button>
 </form>
-<p>Нет аккаунта? <a href="../users/index.php?page=register">Регистрация</a> </p>
+<p>Нет аккаунта? <a href="//<?= APP_BASE_PATH ?>/register">Регистрация</a> </p>
 
 <?php
 

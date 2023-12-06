@@ -2,7 +2,7 @@
 
 namespace controller\user;
 
-use model\role\RoleModal;
+use model\role\RoleModel;
 use model\user\UserModel;
 
 class UserController
@@ -12,12 +12,12 @@ class UserController
         $userModel = new UserModel();
         $users = $userModel->readAll();
 
-        include 'app/view/users/index.php';
+        include 'app/view/user/index.php';
     }
 
     public function create()
     {
-        include 'app/view/users/create.php';
+        include 'app/view/user/create.php';
     }
 
     public function store()
@@ -41,7 +41,7 @@ class UserController
             $userModel->create($data['username'], $data['email'], $data['password']);
         }
 
-        $path = '//' . APP_BASE_PATH . '/users';
+        $path = '//' . APP_BASE_PATH . '/user';
         header("Location: $path");
     }
 
@@ -50,10 +50,10 @@ class UserController
         $userModel = new UserModel();
         $user = $userModel->read($params['id']);
 
-        $roleModel = new RoleModal();
+        $roleModel = new RoleModel();
         $roles = $roleModel->getAllRoles();
 
-        include 'app/view/users/edit.php';
+        include 'app/view/user/edit.php';
     }
 
     public function update($params)
@@ -61,7 +61,7 @@ class UserController
         $userModel = new UserModel();
         $userModel->update($params['id'], $_POST);
 
-        $path = '//' . APP_BASE_PATH . '/users';
+        $path = '//' . APP_BASE_PATH . '/user';
         header("Location: $path");
     }
 
@@ -70,7 +70,7 @@ class UserController
         $userModel = new UserModel();
         $userModel->delete($params['id']);
 
-        $path = '//' . APP_BASE_PATH . '/users';
+        $path = '//' . APP_BASE_PATH . '/user';
         header("Location: $path");
     }
 }

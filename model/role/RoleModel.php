@@ -4,7 +4,7 @@ namespace model\role;
 
 use model\database\Database;
 
-class RoleModal
+class RoleModel
 {
     private $database;
 
@@ -91,8 +91,9 @@ class RoleModal
         }
     }
 
-    public function deleteRole($id) {
-        $query = " DELETE FROM roles WHERE id = ?";
+    public function deleteRole($id)
+    {
+        $query = "DELETE FROM roles WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
