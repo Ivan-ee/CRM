@@ -14,6 +14,15 @@ ob_start();
             <label for="slug" class="form-label">Slug</label>
             <input type="text" class="form-control" id="slug" name="slug" required>
         </div>
+        <div class="mb-3">
+            <label for="roles">Roles</label>
+            <?php foreach ($roles as $role): ?>
+                <div>
+                    <input type="checkbox" name="roles[]" value="<?php echo $role['id']; ?>">
+                    <label for="roles"><?php echo $role['role_name']; ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
         <button type="submit" class="btn btn-primary">Create page</button>
     </form>
 

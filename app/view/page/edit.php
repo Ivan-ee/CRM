@@ -15,6 +15,16 @@ ob_start();
             <label for="slug" class="form-label">Slug</label>
             <input type="text" class="form-control" id="slug" name="slug" value="<?= $page['slug'] ?>" required>
         </div>
+        <div>
+            <label for="roles">Roles</label>
+            <?php $page_roles = explode(',', $page['role']); ?>
+            <?php foreach ($roles as $role): ?>
+                <div>
+                    <input type="checkbox" name="roles[]" value="<?php echo $role['id']; ?>" <?php echo in_array($role['id'], $page_roles) ? 'checked' : '';?>>
+                    <label for="roles"><?php echo $role['role_name']; ?></label>
+                </div>
+            <?php endforeach; ?>
+        </div>
         <button type="submit" class="btn btn-primary">Update Page</button>
     </form>
 

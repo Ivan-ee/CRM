@@ -6,7 +6,7 @@ ob_start();
 
 ?>
 
-<form method="post" action="//<?= APP_BASE_PATH ?>/users/store">
+<form method="post" action="//<?= APP_BASE_PATH ?>/user/store">
     <div>
         <label for="username">username</label>
         <input type="text" id="username" name="username" required>

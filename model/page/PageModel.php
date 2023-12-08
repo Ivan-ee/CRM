@@ -3,6 +3,7 @@
 namespace model\page;
 
 use model\database\Database;
+use model\database\Roles;
 
 class PageModel
 {
@@ -25,6 +26,7 @@ class PageModel
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `title` VARCHAR(255) NOT NULL,
             `slug` VARCHAR(255) NOT NULL,
+            `role` VARCHAR(255) NOT NULL,
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -68,26 +70,40 @@ class PageModel
         }
     }
 
-    public function createPage($title, $slug)
+    public function findBySlug($slug)
     {
-        $query = "INSERT INTO pages (title, slug) VALUES (?,?)";
+        $query = "SELECT * FROM pages WHERE slug = ?";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$title, $slug]);
+            $stmt->execute([$slug]);
+            $page = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $page ? $page : false;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function createPage($title, $slug, $roles)
+    {
+        $query = "INSERT INTO pages (title, slug, role) VALUES (?,?, ?)";
+
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$title, $slug, $roles]);
             return true;
         } catch (\PDOException $e) {
             return false;
         }
     }
 
-    public function updatePage($id, $title, $slug)
+    public function updatePage($id, $title, $slug, $roles)
     {
-        $query = "UPDATE pages SET title = ?, slug = ? WHERE id = ?";
+        $query = "UPDATE pages SET title = ?, slug = ?, role = ? WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$title, $slug, $id]);
+            $stmt->execute([$title, $slug, $roles, $id]);
 
             return true;
         } catch (\PDOException $e) {

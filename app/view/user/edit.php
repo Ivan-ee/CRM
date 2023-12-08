@@ -8,7 +8,7 @@ ob_start();
 
 
 
-<form method="post" action="//<?= APP_BASE_PATH ?>/users/update/<?php echo $user['id']; ?>">
+<form method="post" action="//<?= APP_BASE_PATH ?>/user/update/<?php echo $user['id']; ?>">
     <div>
         <label for="username">username</label>
         <input type="text" id="username" name="username" value="<?php echo $user['username']; ?>" required>
