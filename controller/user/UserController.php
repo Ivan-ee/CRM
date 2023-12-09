@@ -2,13 +2,23 @@
 
 namespace controller\user;
 
+use model\check\CheckModel;
 use model\role\RoleModel;
 use model\user\UserModel;
 
 class UserController
 {
+    private $check;
+
+    public function __construct() {
+        $userRole = $_SESSION['user_role'] ?? null;
+        $this->check = new CheckModel($userRole);
+    }
+
     public function index()
     {
+        $this->check->requirePermission();
+
         $userModel = new UserModel();
         $users = $userModel->readAll();
 
@@ -17,11 +27,15 @@ class UserController
 
     public function create()
     {
+        $this->check->requirePermission();
+
         include 'app/view/user/create.php';
     }
 
     public function store()
     {
+//        $this->check->requirePermission();
+
         if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['confirm_password']) && isset($_POST['email'])) {
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
@@ -47,6 +61,8 @@ class UserController
 
     public function edit($params)
     {
+        $this->check->requirePermission();
+
         $userModel = new UserModel();
         $user = $userModel->read($params['id']);
 
@@ -58,6 +74,8 @@ class UserController
 
     public function update($params)
     {
+//        $this->check->requirePermission();
+
         $userModel = new UserModel();
         $userModel->update($params['id'], $_POST);
 
@@ -67,6 +85,8 @@ class UserController
 
     public function delete($params)
     {
+        $this->check->requirePermission();
+
         $userModel = new UserModel();
         $userModel->delete($params['id']);
 

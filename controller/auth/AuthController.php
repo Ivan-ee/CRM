@@ -3,9 +3,17 @@
 namespace controller\auth;
 
 use model\auth\AuthModel;
+use model\check\CheckModel;
 
 class AuthController
 {
+    private $check;
+
+    public function __construct() {
+        $userRole = $_SESSION['user_role'] ?? null;
+        $this->check = new CheckModel($userRole);
+    }
+
     public function index()
     {
         include 'app/view/auth/register.php';

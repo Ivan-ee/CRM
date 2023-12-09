@@ -12,19 +12,13 @@ class PageController
     private $check;
 
     public function __construct() {
-        $this->check = new CheckModel();
+        $userRole = $_SESSION['user_role'] ?? null;
+        $this->check = new CheckModel($userRole);
     }
 
     public function index()
     {
-        $slug = $this->check->getCurrentUrlSlug();
-        var_dump($slug);
-
-        if (!$this->checkPermission($slug)){
-            $path = '//' . APP_BASE_PATH;
-            header("Location: $path");
-            return;
-        }
+        $this->check->requirePermission();
 
         $pageModel = new PageModel();
         $pages = $pageModel->getAllPages();
@@ -34,6 +28,8 @@ class PageController
 
     public function create()
     {
+        $this->check->requirePermission();
+
         $roleModel = new RoleModel();
         $roles = $roleModel->getAllRoles();
 
@@ -42,6 +38,8 @@ class PageController
 
     public function store()
     {
+//        $this->check->requirePermission();
+
         if (isset($_POST['title']) && isset($_POST['slug']) && isset($_POST['roles'])) {
             $title = $_POST['title'];
             $slug = $_POST['slug'];
@@ -57,6 +55,8 @@ class PageController
 
     public function edit($params)
     {
+        $this->check->requirePermission();
+
         $roleModel = new RoleModel();
         $roles = $roleModel->getAllRoles();
 
@@ -73,6 +73,8 @@ class PageController
 
     public function update($params)
     {
+//        $this->check->requirePermission();
+
         if (isset($params['id']) && isset($_POST['title']) && isset($_POST['slug']) && isset($_POST['roles'])) {
             $id = $params['id'];
             $title = $_POST['title'];
