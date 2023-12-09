@@ -10,7 +10,7 @@ spl_autoload_register(function ($class) {
 
     $classPath = '';
 
-    if (strpos($class, 'model\\') === 0 || strpos($class, 'controller\\') === 0 || strpos($class, 'app\\') === 0) {
+    if (strpos($class, 'model\\') === 0 || strpos($class, 'controller\\') === 0 || strpos($class, 'app\\') === 0 || strpos($class, 'todo\\') === 0) {
         $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
         $classPath = __DIR__ . DIRECTORY_SEPARATOR . $class . '.php';
     }

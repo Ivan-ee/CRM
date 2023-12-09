@@ -30,6 +30,13 @@
                 <li>
                     <a href="//<?= APP_BASE_PATH ?>/logout">Logout</a>
                 </li>
+                <h4>To do list</h4>
+                <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/category">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="//<?= APP_BASE_PATH ?>/todo/category"></use></svg>
+                        Category
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

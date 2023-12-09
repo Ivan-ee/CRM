@@ -1,4 +1,5 @@
 <?php
+
 namespace app;
 
 use controller\role\RoleController;
@@ -6,9 +7,11 @@ use controller\auth\AuthController;
 use controller\user\UserController;
 use controller\page\PageController;
 use controller\home\HomeController;
+use controller\todo\category\CategoryController;
 
 
-class Router {
+class Router
+{
 
     private $routes = [
         '/^\/?$/' => ['controller' => 'home\\HomeController', 'action' => 'index'],
@@ -24,10 +27,11 @@ class Router {
         '/^\/todo\/tasks\/task(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'task'],
         '/^\/quiz(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'quiz\\QuizController'],
         '/^\/shortlink(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'shortlink\\ShortLinkController'],
-        '/^\/([a-zA-Z0-9-]{6,10})$/' => ['controller' => 'shortlink\\ShortLinkController', 'action' => 'redirect'],
+//        '/^\/([a-zA-Z0-9-]{6,10})$/' => ['controller' => 'shortlink\\ShortLinkController', 'action' => 'redirect'],
     ];
 
-    public function run() {
+    public function run()
+    {
         $uri = $_SERVER['REQUEST_URI'];
         $controller = null;
         $action = null;
@@ -38,13 +42,17 @@ class Router {
                 $controller = "controller\\" . $route['controller'];
                 $action = $route['action'] ?? $matches['action'] ?? 'index';
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-//                var_dump($params);
+                var_dump($params);
                 break;
             }
         }
 
+//        var_dump($params);
+        var_dump($controller);
+
         if (!$controller) {
             http_response_code(404);
+            var_dump($params);
             echo "Page not found!";
             return;
         }
@@ -52,6 +60,7 @@ class Router {
         $controllerInstance = new $controller();
         if (!method_exists($controllerInstance, $action)) {
             http_response_code(404);
+
             echo "Action not found!";
             return;
         }

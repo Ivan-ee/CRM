@@ -79,6 +79,16 @@ class UserController
         $userModel = new UserModel();
         $userModel->update($params['id'], $_POST);
 
+        if (isset($_POST['email'])) {
+            $newEmail = $_POST['email'];
+
+            if ($newEmail == $_SESSION['user_email']) {
+                $path = '//' . APP_BASE_PATH . '/logout';
+                header("Location: $path");
+                exit();
+            }
+        }
+
         $path = '//' . APP_BASE_PATH . '/user';
         header("Location: $path");
     }
