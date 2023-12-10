@@ -26,7 +26,7 @@ ob_start();
                         <p><strong><i class="fa-solid fa-hourglass-start"></i> Due Date:</strong> <?php echo htmlspecialchars($task['finish_date']); ?></p>
                         <p><strong><i class="fa-solid fa-file-prescription"></i> Description:</strong> <?php echo htmlspecialchars($task['description'] ?? ''); ?></p>
                         <div class="d-flex justify-content-end">
-                            <a href="edit.php?id=<?php echo $task['id']; ?>" class="btn btn-primary me-2">Edit</a>
+                            <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $task['id']; ?>" class="btn btn-primary me-2">Edit</a>
                             <button class="btn btn-danger">Delete</button>
                         </div>
                     </div>
