@@ -47,14 +47,82 @@ class TagModel
     {
         $query = "SELECT tags.* FROM tags
         JOIN task_tags ON tags.id = task_tags.tag_id
-        WHERE task_tags.task_id = :task_id";
+        WHERE task_tags.task_id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute(['task_id' => $task_id]);
+            $stmt->execute([$task_id]);
 
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function removeAllTaskTags($task_id) {
+        $query = "DELETE FROM task_tags WHERE task_id = :task_id";
+
+        try{
+            $stmt = $this->database->prepare($query);
+            $stmt->execute(['task_id' => $task_id]);
+        } catch(\PDOException $e){
+            return false;
+        }
+    }
+
+    public function getTagByNameAndUserId($tag_name, $user_id)
+    {
+        $query = "SELECT * FROM tags WHERE name = ? AND user_id = ?";
+
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$tag_name, $user_id]);
+            return $stmt->fetch(\PDO::FETCH_ASSOC);
+        } catch(\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function addTag($tag_name, $user_id)
+    {
+        $query = "INSERT INTO tags (name, user_id) VALUE (?, ?)";
+
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$tag_name, $user_id]);
+            return $this->database->lastInsertId();
+        } catch(\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function addTaskTag($task_id, $tag_id)
+    {
+        $query = "INSERT INTO task_tags (task_id, tag_id) VALUE (?, ?)";
+
+        try {
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$task_id, $tag_id]);
+            return true;
+        } catch(\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function removeUnusedTag($tag_id)
+    {
+        $query = "SELECT COUNT(*) FROM task_tags WHERE tag_id = ?";
+        $stmt = $this->database->prepare($query);
+        $stmt->execute([ $tag_id]);
+        $count = $stmt->fetch(\PDO::FETCH_ASSOC)['COUNT(*)'];
+        try {
+            if($count == 0){
+                $query = "DELETE FROM tags WHERE id = ?";
+                $stmt = $this->database->prepare($query);
+                $stmt->execute([$tag_id]);
+                return true;
+            }
+        } catch(\PDOException $e) {
             return false;
         }
     }
