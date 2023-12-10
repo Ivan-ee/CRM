@@ -50,6 +50,21 @@ class TaskModel
 
         try{
             $stmt = $this->database->query("SELECT * FROM todo_list");
+            $todoList= [];
+            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+                $todoList[] = $row;
+            }
+            return $todoList;
+        }catch(\PDOException $e){
+            return false;
+        }
+    }
+
+    public function getAllTasksByIdUser($user_id){
+
+        try{
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE user_id = ?");
+            $stmt->execute([$user_id]);
             $todo_list = [];
             while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
                 $todo_list[] = $row;
@@ -81,20 +96,20 @@ class TaskModel
         try{
             $stmt =$this->database->prepare($query);
             $stmt->execute([$id]);
-            $todo_task = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $todo_task ? $todo_task : false;
+            $todoTask = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $todoTask ? $todoTask : false;
         } catch(\PDOException $e){
             return false;
         }
     }
 
-    public function updateCategory($id, $title, $description, $usability)
+    public function updateTask($data)
     {
-        $query = "UPDATE todo_list SET title = ?, description = ?, usability = ? WHERE id = ?";
+        $query = "UPDATE todo_list SET title = ?, category_id = ?, finish_date = ?, reminder_at = ?, status = ?, priority = ?, description = ? WHERE id = ?";
 
         try{
-            $stmt = $this->database->prepare($query);
-            $stmt->execute([$title, $description, $usability, $id]);
+            $stmt = $this->db->prepare($query);
+            $stmt->execute([$data['title'], $data['category_id'], $data['finish_date'], $data['reminder_at'], $data['status'], $data['priority'], $data['description'], $data['id']]);
 
             return true;
         } catch(\PDOException $e){
