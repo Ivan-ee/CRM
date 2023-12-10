@@ -37,6 +37,12 @@
                         Category
                     </a>
                 </li>
+                <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task">
+                        <svg class="bi me-2" width="16" height="16"><use xlink:href="//<?= APP_BASE_PATH ?>/todo/task"></use></svg>
+                        Task
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>

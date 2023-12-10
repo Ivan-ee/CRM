@@ -7,10 +7,13 @@ use model\database\Database;
 class CategoryModel
 {
     private $database;
+    private $userID;
 
     public function __construct()
     {
         $this->database = Database::getInstance()->getConnection();
+
+        $this->userID = $_SESSION['user_id'] ?? null;
 
         try {
             $result = $this->database->query("SELECT 1 FROM `todo_category` LIMIT 1");
@@ -41,13 +44,28 @@ class CategoryModel
     public function getAllCategories()
     {
         try {
-            $stmt = $this->database->query("SELECT * FROM todo_category");
+            $stmt = $this->database->prepare("SELECT * FROM todo_category WHERE user_id = ?");
+            $stmt->execute([$this->userID]);
             $todo_category = [];
             while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $todo_category[] = $row;
             }
             return $todo_category;
         } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getAllCategoriesWithUsability(){
+        try{
+            $stmt = $this->database->prepare("SELECT * FROM todo_category WHERE user_id = ? AND usability = 1");
+            $stmt->execute([$this->userID]);
+            $todo_category = [];
+            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+                $todo_category[] = $row;
+            }
+            return $todo_category;
+        }catch(\PDOException $e){
             return false;
         }
     }

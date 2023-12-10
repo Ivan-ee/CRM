@@ -2,7 +2,6 @@
 
 namespace model\database;
 
-
 class Database{
     private static $instance = null;
     private $conn;

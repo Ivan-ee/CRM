@@ -8,6 +8,7 @@ use controller\user\UserController;
 use controller\page\PageController;
 use controller\home\HomeController;
 use controller\todo\category\CategoryController;
+use controller\todo\task\TaskController;
 
 
 class Router
@@ -21,10 +22,10 @@ class Router
         '/^\/page(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'page\\PageController'],
         '/^\/(register|login|authenticate|logout)(\/(?P<action>[a-z]+))?$/' => ['controller' => 'auth\\AuthController'],
         '/^\/todo\/category(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\category\\CategoryController'],
-        '/^\/todo\/tasks(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\tasks\\TaskController'],
-        '/^\/todo\/tasks\/by-tag(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'tasksByTag'],
-        '/^\/todo\/tasks\/update-status(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'updateStatus'],
-        '/^\/todo\/tasks\/task(\/(?P<id>\d+))?$/' => ['controller' => 'todo\tasks\\TaskController', 'action' => 'task'],
+        '/^\/todo\/task(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'todo\task\\TaskController'],
+        '/^\/todo\/task\/by-tag(\/(?P<id>\d+))?$/' => ['controller' => 'todo\task\\TaskController', 'action' => 'tasksByTag'],
+        '/^\/todo\/task\/update-status(\/(?P<id>\d+))?$/' => ['controller' => 'todo\task\\TaskController', 'action' => 'updateStatus'],
+        '/^\/todo\/task\/task(\/(?P<id>\d+))?$/' => ['controller' => 'todo\task\\TaskController', 'action' => 'task'],
         '/^\/quiz(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'quiz\\QuizController'],
         '/^\/shortlink(\/(?P<action>[a-z]+)(\/(?P<id>\d+))?)?$/' => ['controller' => 'shortlink\\ShortLinkController'],
 //        '/^\/([a-zA-Z0-9-]{6,10})$/' => ['controller' => 'shortlink\\ShortLinkController', 'action' => 'redirect'],
