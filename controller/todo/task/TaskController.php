@@ -27,7 +27,53 @@ class TaskController
         $taskModel = new TaskModel();
         $tasks = $taskModel->getAllTasksByIdUser($user_id);
 
+        $categoryModel = new CategoryModel();
+
+        // Получение списка тегов для каждой записи в массиве
+        foreach($tasks as &$task){
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
+            $task['category'] = $categoryModel->getCategoryById($task['category_id']);
+        }
+
         include 'app/view/todo/task/index.php';
+    }
+
+    public function completed(){
+        $this->check->requirePermission();
+
+        $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+
+        $taskModel = new TaskModel();
+        $completedTasks = $taskModel->getAllCompletedTasksByIdUser($user_id);
+
+        $categoryModel = new CategoryModel();
+
+        // Получение списка тегов для каждой записи в массиве
+        foreach($completedTasks as &$task){
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
+            $task['category'] = $categoryModel->getCategoryById($task['category_id']);
+        }
+
+        include 'app/view/todo/task/completed.php';
+    }
+
+    public function expired(){
+        $this->check->requirePermission();
+
+        $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+
+        $taskModel = new TaskModel();
+        $expiredTasks = $taskModel->getAllExpiredTasksByIdUser($user_id);
+
+        $categoryModel = new CategoryModel();
+
+        // Получение списка тегов для каждой записи в массиве
+        foreach($expiredTasks as &$task){
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
+            $task['category'] = $categoryModel->getCategoryById($task['category_id']);
+        }
+
+        include 'app/view/todo/task/expired.php';
     }
 
     public function create(){

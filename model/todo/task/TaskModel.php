@@ -8,17 +8,19 @@ class TaskModel
 {
     private $database;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->database = Database::getInstance()->getConnection();
 
-        try{
+        try {
             $result = $this->database->query("SELECT 1 FROM `todo_list` LIMIT 1");
-        } catch(\PDOException $e){
+        } catch (\PDOException $e) {
             $this->createTable();
         }
     }
 
-    public function createTable(){
+    public function createTable()
+    {
         $query = "CREATE TABLE IF NOT EXISTS `todo_list` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `user_id` INT NOT NULL,
@@ -34,43 +36,80 @@ class TaskModel
             `copleted_at` DATETIME,
             `reminder_at` DATETIME,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-            FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE CASCADE,
+            FOREIGN KEY (category_id) REFERENCES todo_category(id) ON DELETE SET NULL,
             FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE SET NULL
         )";
 
-        try{
+        try {
             $this->database->exec($query);
             return true;
-        } catch(\PDOException $e){
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
-    public function getAllTasks(){
+    public function getAllTasks()
+    {
 
-        try{
+        try {
             $stmt = $this->database->query("SELECT * FROM todo_list");
-            $todoList= [];
-            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
-                $todoList[] = $row;
-            }
-            return $todoList;
-        }catch(\PDOException $e){
-            return false;
-        }
-    }
-
-    public function getAllTasksByIdUser($user_id){
-
-        try{
-            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE user_id = ?");
-            $stmt->execute([$user_id]);
             $todo_list = [];
-            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $todo_list[] = $row;
             }
             return $todo_list;
-        }catch(\PDOException $e){
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getAllTasksByIdUser($user_id)
+    {
+
+        try {
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE finish_date > NOW() AND user_id = :user_id AND status != 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))");
+            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $todo_list = [];
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $todo_list[] = $row;
+            }
+            return $todo_list;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getAllCompletedTasksByIdUser($user_id)
+    {
+
+        try {
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE user_id = :user_id AND status = 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))");
+            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $todo_list = [];
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $todo_list[] = $row;
+            }
+            return $todo_list;
+        } catch (\PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getAllExpiredTasksByIdUser($user_id)
+    {
+
+        try {
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE finish_date < NOW() AND user_id = :user_id ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))");
+            $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
+            $stmt->execute();
+            $todo_list = [];
+            while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                $todo_list[] = $row;
+            }
+            return $todo_list;
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -84,7 +123,7 @@ class TaskModel
             $stmt = $this->database->prepare($query);
             $stmt->execute([$data['user_id'], $data['title'], $data['category_id'], $data['status'], $data['priority'], $data['finish_date']]);
             return true;
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -93,12 +132,12 @@ class TaskModel
     {
         $query = "SELECT * FROM todo_list WHERE id = ?";
 
-        try{
-            $stmt =$this->database->prepare($query);
+        try {
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
-            $todoTask = $stmt->fetch(\PDO::FETCH_ASSOC);
-            return $todoTask ? $todoTask : false;
-        } catch(\PDOException $e){
+            $todo_task = $stmt->fetch(\PDO::FETCH_ASSOC);
+            return $todo_task ? $todo_task : false;
+        } catch (\PDOException $e) {
             return false;
         }
     }
@@ -107,57 +146,28 @@ class TaskModel
     {
         $query = "UPDATE todo_list SET title = ?, category_id = ?, finish_date = ?, reminder_at = ?, status = ?, priority = ?, description = ? WHERE id = ?";
 
-        try{
+        try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$data['title'], $data['category_id'], $data['finish_date'], $data['reminder_at'], $data['status'], $data['priority'], $data['description'], $data['id']]);
 
             return true;
-        } catch(\PDOException $e){
+        } catch (\PDOException $e) {
             return false;
         }
     }
 
     public function deleteCategory($id)
     {
-        $query = "DELETE FROM todo_list WHERE id = ?";
+        $query = "DELETE FROM todo_category WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
             return true;
-        } catch(\PDOException $e) {
+        } catch (\PDOException $e) {
             return false;
         }
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <title><?= $title ?></title>
+    <link rel="stylesheet" href="//<?= APP_BASE_PATH ?>/app/css/style.css">
 </head>
 <body>
 <div>
@@ -32,14 +33,32 @@
                 </li>
                 <h4>To do list</h4>
                 <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/create" class="nav-link text-white">
+                        Create task
+                    </a>
+                </li>
+                <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task" class="nav-link text-white">
+                        Tasks (opened)
+                    </a>
+                </li>
+                <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/completed" class="nav-link text-white">
+                        Tasks (completed)
+                    </a>
+                </li>
+                <li>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/expired" class="nav-link text-white">
+                        Tasks (expired)
+                    </a>
+                </li>
+                <li>
                     <a href="//<?= APP_BASE_PATH ?>/todo/category">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="//<?= APP_BASE_PATH ?>/todo/category"></use></svg>
                         Category
                     </a>
                 </li>
                 <li>
                     <a href="//<?= APP_BASE_PATH ?>/todo/task">
-                        <svg class="bi me-2" width="16" height="16"><use xlink:href="//<?= APP_BASE_PATH ?>/todo/task"></use></svg>
                         Task
                     </a>
                 </li>
@@ -51,5 +70,7 @@
     </div>
 
 </div>
+
+<script src="//<?= APP_BASE_PATH ?>/app/js/main.js"></script>
 </body>
 </html>
