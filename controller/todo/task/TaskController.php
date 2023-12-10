@@ -10,43 +10,44 @@ use model\todo\tag\TagModel;
 class TaskController
 {
     private $check;
+    private $tagModel;
 
     public function __construct()
     {
-        $userRole = $_SESSION['user_role'] ?? null;
+        $userRole = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : null;
+
         $this->check = new CheckModel($userRole);
+        $this->tagModel = new TagModel();
     }
 
-    public function index()
-    {
+    public function index(){
         $this->check->requirePermission();
+        $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
         $taskModel = new TaskModel();
-        $tasks = $taskModel->getAllTasks();
+        $tasks = $taskModel->getAllTasksByIdUser($user_id);
 
         include 'app/view/todo/task/index.php';
     }
 
-    public function create()
-    {
+    public function create(){
         $this->check->requirePermission();
 
-        $CategoryModel = new CategoryModel();
-        $categories = $CategoryModel->getAllCategoriesWithUsability();
+        $todoCategoryModel = new CategoryModel();
+        $categories = $todoCategoryModel->getAllCategoriesWithUsability();
 
         include 'app/view/todo/task/create.php';
     }
 
-    public function store()
-    {
+    public function store(){
 
         $this->check->requirePermission();
 
-        if (isset($_POST['title']) && isset($_POST['category_id']) && isset($_POST['finish_date'])) {
+        if(isset($_POST['title']) && isset($_POST['category_id']) && isset($_POST['finish_date'])){
             $data['title'] = trim($_POST['title']);
             $data['category_id'] = trim($_POST['category_id']);
             $data['finish_date'] = trim($_POST['finish_date']);
-            $data['user_id'] = $_SESSION['user_id'] ?? 0;
+            $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
             $data['status'] = 'new';
             $data['priority'] = 'low';
 
@@ -58,8 +59,7 @@ class TaskController
         header("Location: $path");
     }
 
-    public function edit($params)
-    {
+    public function edit($params){
         $this->check->requirePermission();
 
         $taskModel = new TaskModel();
@@ -68,8 +68,8 @@ class TaskController
         $categoryModel = new CategoryModel();
         $categories = $categoryModel->getAllCategoriesWithUsability();
 
-        if (!$task) {
-            echo "task not found";
+        if(!$task){
+            echo "Task not found";
             return;
         }
 
@@ -80,37 +80,95 @@ class TaskController
     }
 
 
-    public function update($params)
-    {
+    public function update(){
         $this->check->requirePermission();
 
-        if (isset($params['id']) && isset($_POST['title']) && isset($_POST['description'])) {
-            $id = trim($params['id']);
-            $title = trim($_POST['title']);
-            $description = trim($_POST['description']);
-            $usability = $_POST['usability'] ?? 0;
+        if(isset($_POST['id']) && isset($_POST['title']) && isset($_POST['category_id']) && isset($_POST['finish_date'])){
+            $data['id'] = trim($_POST['id']);
+            $data['title'] = trim($_POST['title']);
+            $data['category_id'] = trim($_POST['category_id']);
+            $data['finish_date'] = trim($_POST['finish_date']);
+            $data['reminder_at'] = trim($_POST['reminder_at']);
+            $data['status'] = trim($_POST['status']);
+            $data['priority'] = trim($_POST['priority']);
+            $data['description']  = trim($_POST['description']);
+            $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
-            if (empty($title) || empty($description)) {
-                echo "Title and Description are required";
-                return;
+            // Обработка даты окончания и напоминания
+            $finish_date_value = $data['finish_date'];
+            $reminder_at_option = $data['reminder_at'];
+            $finish_date = new \DateTime($finish_date_value);
+
+            switch ($reminder_at_option) {
+                case '30_minutes':
+                    $interval = new \DateInterval('PT30M');
+                    break;
+                case '1_hour':
+                    $interval = new \DateInterval('PT1H');
+                    break;
+                case '2_hours':
+                    $interval = new \DateInterval('PT2H');
+                    break;
+                case '12_hours':
+                    $interval = new \DateInterval('PT12H');
+                    break;
+                case '24_hours':
+                    $interval = new \DateInterval('P1D');
+                    break;
+                case '7_days':
+                    $interval = new \DateInterval('P7D');
+                    break;
             }
 
-            $todoCategoryModel = new CategoryModel();
-            $todoCategoryModel->updateCategory($id, $title, $description, $usability);
+            $reminder_at = $finish_date->sub($interval);
+            $data['reminder_at'] = $reminder_at->format('Y-m-d\TH:i');
+
+            // обновляем данные по задаче в базе
+            $taskModel = new TaskModel();
+            $taskModel->updateTask($data);
+
+
+            // Обработка тегов
+            $tags = explode(',', $_POST['tags']);
+            $tags = array_map('trim', $tags);
+
+            // Получение тегов с базы по задаче, которую редактируем
+            $oldTags = $this->tagModel->getTagsByTaskId($data['id']);
+
+            // Удаление старых связей между тегами и задачей
+            $this->tagModel->removeAllTaskTags($data['id']);
+
+            // Добавляем новые теги и связываем с задачей
+            foreach ($tags as $tag_name){
+                $tag = $this->tagModel->getTagByNameAndUserId($tag_name, $data['user_id']);
+                tt($tag);
+                if (!$tag){
+                    $tag_id = $this->tagModel->addTag($tag_name, $data['user_id']);
+                } else{
+                    $tag_id = $tag['id'];
+                }
+
+                $this->tagModel->addTaskTag($data['id'], $tag_id);
+            }
+
+            // Удаляем неиспользуемые теги
+            foreach ($oldTags as $oldTag){
+                $this->tagModel->removeUnusedTag($oldTag['id']);
+            }
+
         }
-        $path = '//' . APP_BASE_PATH . '/todo/category';
+
+        $path = '//'. APP_BASE_PATH . '/todo/task';
         header("Location: $path");
     }
 
-    public function delete($params)
-    {
+    public function delete($params){
         $this->check->requirePermission();
 
         $todoCategoryModel = new CategoryModel();
         $todoCategoryModel->deleteCategory($params['id']);
 
-        $path = '//' . APP_BASE_PATH . '/todo/category';
+        $path = '/'. APP_BASE_PATH . '/todo/category';
         header("Location: $path");
     }
 }
-

@@ -108,7 +108,7 @@ class TaskModel
         $query = "UPDATE todo_list SET title = ?, category_id = ?, finish_date = ?, reminder_at = ?, status = ?, priority = ?, description = ? WHERE id = ?";
 
         try{
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$data['title'], $data['category_id'], $data['finish_date'], $data['reminder_at'], $data['status'], $data['priority'], $data['description'], $data['id']]);
 
             return true;
