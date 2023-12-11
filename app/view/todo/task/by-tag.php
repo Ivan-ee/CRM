@@ -1,19 +1,19 @@
 <?php
 
-$title = 'Todo list expired';
+$title = 'Todo list by tag';
 ob_start();
+
 ?>
 
-    <h1 class="mb-4">Todo List expired</h1>
+    <h1 class="mb-4">Todo List by tag: <span>"<?=$tagName;?>"</span></h1>
     <div class="d-flex justify-content-around row filter-priority">
         <a data-priority="low" class="btn mb-3 col-2 sort-btn" style="background: #51A5F4">Low</a>
         <a data-priority="medium" class="btn mb-3 col-2 sort-btn" style="background: #3C7AB5">Medium</a>
         <a data-priority="high" class="btn mb-3 col-2 sort-btn" style="background: #274F75">High</a>
         <a data-priority="urgent" class="btn mb-3 col-2 sort-btn" style="background: #122436">Urgent</a>
     </div>
-
     <div class="accordion" id="tasks-accordion">
-        <?php foreach ($expiredTasks as $oneTask): ?>
+        <?php foreach ($tasksByTag as $oneTask): ?>
             <?php
             $priorityColor = '';
             switch ($oneTask['priority']) {
@@ -61,29 +61,9 @@ ob_start();
                         </p>
                         <hr>
                         <div class="d-flex justify-content-start action-task">
-                            <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="POST" class="me-2">
-                                <input type="hidden" name="status" value="cancelled">
-                                <button type="submit" class="btn <?=$oneTask['status'] == 'cancelled' ? 'btn-dark' : 'btn-secondary';?>">Cancelled</button>
-                            </form>
-                            <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                                <input type="hidden" name="status" value="new">
-                                <button type="submit" class="btn <?=$oneTask['status'] == 'new' ? 'btn-dark' : 'btn-secondary';?>">New</button>
-                            </form>
-                            <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                                <input type="hidden" name="status" value="in_progress">
-                                <button type="submit" class="btn <?=$oneTask['status'] == 'in_progress' ? 'btn-dark' : 'btn-secondary';?>">In progress</button>
-                            </form>
-                            <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                                <input type="hidden" name="status" value="on_hold">
-                                <button type="submit" class="btn <?=$oneTask['status'] == 'on_hold' ? 'btn-dark' : 'btn-secondary';?>">On hold</button>
-                            </form>
-                            <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                                <input type="hidden" name="status" value="completed">
-                                <button type="submit" class="btn <?=$oneTask['status'] == 'completed' ? 'btn-dark' : 'btn-secondary';?>">Completed</button>
-                            </form>
 
-                            <a href="//<?= APP_BASE_PATH ?>/todo/tasks/edit/<?php echo $oneTask['id']; ?>" class="btn btn-primary me-2">Edit</a>
-                            <a href="//<?= APP_BASE_PATH ?>/todo/tasks/delete/<?php echo $oneTask['id']; ?>" class="btn btn-danger me-2">Delete</a>
+                            <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $oneTask['task_id']; ?>" class="btn btn-primary me-2">Edit</a>
+                            <a href="//<?= APP_BASE_PATH ?>/todo/task/delete/<?php echo $oneTask['task_id']; ?>" class="btn btn-danger me-2">Delete</a>
                         </div>
 
                     </div>
@@ -91,6 +71,8 @@ ob_start();
             </div>
         <?php endforeach; ?>
     </div>
+
+
 
 <?php $content = ob_get_clean();
 
