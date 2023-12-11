@@ -1,12 +1,12 @@
 <?php
 
-$title = 'Register UserModel';
+$title = 'Регистрация';
 
 ob_start();
 
 ?>
 
-<h1>Регистрация</h1>
+<h1>Регестрация</h1>
 
 <form class="form" method="post" action="//<?= APP_BASE_PATH ?>/auth/store">
     <div>
@@ -25,7 +25,7 @@ ob_start();
         <label for="confirm_password">Подтверждения пароля</label>
         <input type="password" id="confirm_password" name="confirm_password" required>
     </div>
-    <button type="submit">Register</button>
+    <button type="submit">Регестрация</button>
     <p class="auth">Уже есть аккаунт? <a href="//<?= APP_BASE_PATH ?>/auth/login">Войти</a> </p>
 </form>
 

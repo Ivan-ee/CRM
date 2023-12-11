@@ -5,13 +5,13 @@ namespace model\todo\tag;
 use model\database\Database;
 
 class TagModel {
-    private $db;
+    private $database;
 
     public function __construct(){
-        $this->db = Database::getInstance()->getConnection();
+        $this->database = Database::getInstance()->getConnection();
 
         try{
-            $result = $this->db->query("SELECT 1 FROM `tags` LIMIT 1");
+            $result = $this->database->query("SELECT 1 FROM `tags` LIMIT 1");
         } catch(\PDOException $e){
             $this->createTables();
         }
@@ -33,7 +33,7 @@ class TagModel {
         );";
 
         try{
-            $this->db->exec($query);
+            $this->database->exec($query);
             return true;
         } catch(\PDOException $e){
             return false;
@@ -43,11 +43,11 @@ class TagModel {
     public function getTagsByTaskId($task_id) {
         $query = "SELECT tags.* FROM tags
         JOIN task_tags ON tags.id = task_tags.tag_id
-        WHERE task_tags.task_id = :task_id";
+        WHERE task_tags.task_id = ?";
 
         try {
-            $stmt = $this->db->prepare($query);
-            $stmt->execute(['task_id' => $task_id]);
+            $stmt = $this->database->prepare($query);
+            $stmt->execute([$task_id]);
 
             $tags = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -62,7 +62,7 @@ class TagModel {
         $query = "DELETE FROM task_tags WHERE task_id = :task_id";
 
         try{
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute(['task_id' => $task_id]);
         } catch(\PDOException $e){
             return false;
@@ -74,7 +74,7 @@ class TagModel {
         $query = "SELECT * FROM tags WHERE name = ? AND user_id = ?";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$tag_name, $user_id]);
             return $stmt->fetch(\PDO::FETCH_ASSOC);
         } catch(\PDOException $e) {
@@ -88,9 +88,9 @@ class TagModel {
         $query = "INSERT INTO tags (name, user_id) VALUE (LOWER(?), ?)";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$tag_name, $user_id]);
-            return $this->db->lastInsertId();
+            return $this->database->lastInsertId();
         } catch(\PDOException $e) {
             return false;
         }
@@ -101,7 +101,7 @@ class TagModel {
         $query = "INSERT INTO task_tags (task_id, tag_id) VALUE (?, ?)";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$task_id, $tag_id]);
             return true;
         } catch(\PDOException $e) {
@@ -112,13 +112,13 @@ class TagModel {
     public function removeUnusedTag($tag_id)
     {
         $query = "SELECT COUNT(*) FROM task_tags WHERE tag_id = ?";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->database->prepare($query);
         $stmt->execute([ $tag_id]);
         $count = $stmt->fetch(\PDO::FETCH_ASSOC)['COUNT(*)'];
         try {
             if($count == 0){
                 $query = "DELETE FROM tags WHERE id = ?";
-                $stmt = $this->db->prepare($query);
+                $stmt = $this->database->prepare($query);
                 $stmt->execute([$tag_id]);
                 return true;
             }
@@ -132,7 +132,7 @@ class TagModel {
         $query = "SELECT name FROM tags WHERE id = ?";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$tag_id]);
             $tag = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $tag ? $tag['name'] : '';

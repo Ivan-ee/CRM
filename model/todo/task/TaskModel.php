@@ -5,13 +5,13 @@ namespace model\todo\task;
 use model\database\Database;
 
 class TaskModel {
-    private $db;
+    private $database;
 
     public function __construct(){
-        $this->db = Database::getInstance()->getConnection();
+        $this->database = Database::getInstance()->getConnection();
 
         try{
-            $result = $this->db->query("SELECT 1 FROM `todo_list` LIMIT 1");
+            $result = $this->database->query("SELECT 1 FROM `todo_list` LIMIT 1");
         } catch(\PDOException $e){
             $this->createTable();
         }
@@ -38,7 +38,7 @@ class TaskModel {
         )";
 
         try{
-            $this->db->exec($query);
+            $this->database->exec($query);
             return true;
         } catch(\PDOException $e){
             return false;
@@ -48,7 +48,7 @@ class TaskModel {
     public function getAllTasks(){
 
         try{
-            $stmt = $this->db->query("SELECT * FROM todo_list");
+            $stmt = $this->database->query("SELECT * FROM todo_list");
             $todo_list = [];
             while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
                 $todo_list[] = $row;
@@ -62,7 +62,7 @@ class TaskModel {
     public function getAllTasksByIdUser($user_id){
 
         try{
-            $stmt = $this->db->prepare("SELECT * FROM todo_list WHERE finish_date > NOW() AND user_id = :user_id AND status != 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE finish_date > NOW() AND user_id = :user_id AND status != 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
             $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
             $stmt->execute();
             $todo_list = [];
@@ -78,7 +78,7 @@ class TaskModel {
     public function getAllCompletedTasksByIdUser($user_id){
 
         try{
-            $stmt = $this->db->prepare("SELECT * FROM todo_list WHERE user_id = :user_id AND status = 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE user_id = :user_id AND status = 'completed' ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
             $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
             $stmt->execute();
             $todo_list = [];
@@ -94,7 +94,7 @@ class TaskModel {
     public function getAllExpiredTasksByIdUser($user_id){
 
         try{
-            $stmt = $this->db->prepare("SELECT * FROM todo_list WHERE finish_date < NOW() AND user_id = :user_id ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
+            $stmt = $this->database->prepare("SELECT * FROM todo_list WHERE finish_date < NOW() AND user_id = :user_id ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date))" );
             $stmt->bindParam(':user_id', $user_id, \PDO::PARAM_INT);
             $stmt->execute();
             $todo_list = [];
@@ -113,7 +113,7 @@ class TaskModel {
         $query = "INSERT INTO todo_list (user_id, title, category_id, status, priority, finish_date) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$data['user_id'], $data['title'], $data['category_id'], $data['status'], $data['priority'], $data['finish_date']]);
             return true;
         } catch(\PDOException $e) {
@@ -126,7 +126,7 @@ class TaskModel {
         $query = "SELECT * FROM todo_list WHERE id = ?";
 
         try{
-            $stmt =$this->db->prepare($query);
+            $stmt =$this->database->prepare($query);
             $stmt->execute([$id]);
             $todo_task = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $todo_task ? $todo_task : false;
@@ -140,7 +140,7 @@ class TaskModel {
         $query = "SELECT * FROM todo_list WHERE id = ? AND user_id = ?";
 
         try{
-            $stmt =$this->db->prepare($query);
+            $stmt =$this->database->prepare($query);
             $stmt->execute([$id_task, $id_user]);
             $todo_task = $stmt->fetch(\PDO::FETCH_ASSOC);
             return $todo_task ? $todo_task : [];
@@ -153,8 +153,10 @@ class TaskModel {
     {
         $query = "UPDATE todo_list SET title = ?, category_id = ?, finish_date = ?, reminder_at = ?, status = ?, priority = ?, description = ? WHERE id = ?";
 
+//        tte($data);
+
         try{
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$data['title'], $data['category_id'], $data['finish_date'], $data['reminder_at'], $data['status'], $data['priority'], $data['description'], $data['id']]);
 
             return true;
@@ -168,7 +170,7 @@ class TaskModel {
         $query = "DELETE FROM todo_category WHERE id = ?";
 
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute([$id]);
             return true;
         } catch(\PDOException $e) {
@@ -183,7 +185,7 @@ class TaskModel {
         WHERE task_tags.tag_id = :tag_id AND todo_list.user_id = :user_id ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), finish_date));";
 
         try{
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
             $stmt->execute(['tag_id' => $tag_id, 'user_id' => $user_id]);
             $todo_list = $stmt->fetchAll(\PDO::FETCH_ASSOC);
             return $todo_list ? $todo_list : $todo_list = [];
@@ -205,7 +207,7 @@ class TaskModel {
 
             $query .= " WHERE id = :id";
 
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->database->prepare($query);
 
             $params = [':status' => $status, ':id' => $id];
 

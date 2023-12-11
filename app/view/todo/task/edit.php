@@ -12,11 +12,11 @@ ob_start();
 
             <div>
                 <label for="title">Заголовок</label>
-                <input type="text" id="title" name="title" value="<?= htmlspecialchars($task['title']) ?>" required>
+                <input type="text" id="title" name="title" value="<?= $task['title'] ?>" required>
             </div>
 
             <div>
-                <label for="reminder_at">Reminder At</label>
+                <label for="reminder_at">Напомнить за</label>
                 <select id="reminder_at" name="reminder_at">
                     <option value="30_minutes">30 минут</option>
                     <option value="1_hour">1 час</option>
@@ -40,11 +40,11 @@ ob_start();
 
             <div class="col-12 col-md-6 mb-3">
                 <label for="finish_date">Дата окончания</label>
-                <input type="datetime-local" id="finish_date" name="finish_date" value="<?= $task['finish_date'] !== null ? htmlspecialchars(str_replace(' ', 'T', $task['finish_date'])) : '' ?>">
+                <input type="datetime-local" id="finish_date" name="finish_date" value="<?= $task['finish_date'] !== null ? str_replace(' ', 'T', $task['finish_date']) : '' ?>" required>
             </div>
         </div>
 
-        <div class="row">
+        <div>
             <div>
                 <label for="status">Статус</label>
                 <select id="status" name="status" required>
@@ -87,14 +87,13 @@ ob_start();
                 <input class="form-control" type="hidden" name="tags" id="hidden-tags" value="<?=implode(', ', $tagNames) ?>">
             </div>
 
-            <!-- Description field -->
             <div>
                 <label for="description">Описание</label>
                 <textarea id="description" name="description" rows="3"><?php echo $task['description'] ?? ''; ?></textarea>
             </div>
         </div>
 
-        <div >
+        <div>
             <div>
                 <button type="submit" class="btn ">Обновить задачу</button>
             </div>
@@ -104,7 +103,7 @@ ob_start();
         const tagInput = document.querySelector('#tag-input');
         const tagsContainer = document.querySelector('.tags-container');
         const hiddenTags = document.querySelector('#hidden-tags');
-        const existingTags = '<?= htmlspecialchars(isset($task['tags']) ? $task['tags'] : '') ?>';
+        const existingTags = '<?= isset($task['tags']) ? $task['tags'] : ''?>';
 
         function createTag(text) {
             const tag = document.createElement('div');

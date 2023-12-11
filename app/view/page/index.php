@@ -4,8 +4,8 @@ $title = 'Страницы';
 ob_start();
 ?>
 
-    <h1 class="mb-4">Страницы</h1>
-    <a href="//<?= APP_BASE_PATH ?>/page/create" class="btn btn-create">Create page</a>
+    <h1>Страницы</h1>
+    <a href="//<?= APP_BASE_PATH ?>/page/create" class="btn btn-create">Создать страницу</a>
     <table class="table">
         <thead>
         <tr>
@@ -25,7 +25,7 @@ ob_start();
                 <td><?= $page['role'] ?></td>
                 <td>
                     <a href="//<?= APP_BASE_PATH ?>/page/edit/<?= $page['id'] ?>" class="btn btn-edit">Редактировать</a>
-                    <a href="//<?= APP_BASE_PATH ?>/page/delete/<?= $page['id'] ?>" class="btn btn-delete" onclick="return confirm('Are you sure?')">Удалить</a>
+                    <a href="//<?= APP_BASE_PATH ?>/page/delete/<?= $page['id'] ?>" class="btn btn-delete" onclick="return confirm('Вы уверенны?')">Удалить</a>
                 </td>
             </tr>
         <?php endforeach; ?>

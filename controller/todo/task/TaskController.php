@@ -10,13 +10,13 @@ use model\todo\tag\TagModel;
 class TaskController{
 
     private $check;
-    private $tagsModel;
+    private $tagModel;
 
     public function __construct()
     {
         $userRole = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : null;
         $this->check = new CheckModel($userRole);
-        $this->tagsModel = new TagModel();
+        $this->tagModel = new TagModel();
     }
 
     public function index(){
@@ -29,7 +29,7 @@ class TaskController{
         $categoryModel = new CategoryModel();
 
         foreach($tasks as &$task){
-            $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
         }
 
@@ -47,7 +47,7 @@ class TaskController{
         $categoryModel = new CategoryModel();
 
         foreach($completedTasks as &$task){
-            $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
         }
 
@@ -65,7 +65,7 @@ class TaskController{
         $categoryModel = new CategoryModel();
 
         foreach($expiredTasks as &$task){
-            $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
         }
 
@@ -115,7 +115,7 @@ class TaskController{
             return;
         }
 
-        $tags = $this->tagsModel->getTagsByTaskId($task['id']);
+        $tags = $this->tagModel->getTagsByTaskId($task['id']);
 
         include 'app/view/todo/task/edit.php';
     }
@@ -135,7 +135,6 @@ class TaskController{
             $data['description']  = $_POST['description'];
             $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
-            // Обработка даты окончания и напоминания
             $finish_date_value = $data['finish_date'];
             $reminder_at_option = $data['reminder_at'];
             $finish_date = new \DateTime($finish_date_value);
@@ -167,34 +166,29 @@ class TaskController{
             $taskModel = new TaskModel();
             $taskModel->updateTask($data);
 
+//            tte($data);
 
-            // Обработка тегов
             $tags = explode(',', $_POST['tags']);
             $tags = array_map('trim', $tags);
 
-            // Получение тегов с базы по задаче, которую редактируем
-            $oldTags = $this->tagsModel->getTagsByTaskId($data['id']);
+            $oldTags = $this->tagModel->getTagsByTaskId($data['id']);
 
-            // Удаление старых связей между тегами и задачей
-            $this->tagsModel->removeAllTaskTags($data['id']);
+            $this->tagModel->removeAllTaskTags($data['id']);
 
-            // Добавляем новые теги и связываем с задачей
             foreach ($tags as $tag_name){
                 $tag_name = strtolower($tag_name);
-                $tag = $this->tagsModel->getTagByNameAndUserId($tag_name, $data['user_id']);
-                tt($tag);
+                $tag = $this->tagModel->getTagByNameAndUserId($tag_name, $data['user_id']);
                 if (!$tag){
-                    $tag_id = $this->tagsModel->addTag($tag_name, $data['user_id']);
+                    $tag_id = $this->tagModel->addTag($tag_name, $data['user_id']);
                 } else{
                     $tag_id = $tag['id'];
                 }
 
-                $this->tagsModel->addTaskTag($data['id'], $tag_id);
+                $this->tagModel->addTaskTag($data['id'], $tag_id);
             }
 
-            // Удаляем неиспользуемые теги
             foreach ($oldTags as $oldTag){
-                $this->tagsModel->removeUnusedTag($oldTag['id']);
+                $this->tagModel->removeUnusedTag($oldTag['id']);
             }
 
         }
@@ -226,9 +220,8 @@ class TaskController{
 
         $categoryModel = new CategoryModel();
 
-        // Получение списка тегов для каждой записи в массиве
         foreach ($tasksByTag as &$task) {
-            $task['tags'] = $this->tagsModel->getTagsByTaskId($task['task_id']);
+            $task['tags'] = $this->tagModel->getTagsByTaskId($task['task_id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
         }
 
@@ -273,7 +266,7 @@ class TaskController{
             return;
         }
 
-        $tags = $this->tagsModel->getTagsByTaskId($task['id']);
+        $tags = $this->tagModel->getTagsByTaskId($task['id']);
 
         include 'app/view/todo/task/task.php';
     }

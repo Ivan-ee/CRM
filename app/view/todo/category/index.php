@@ -5,7 +5,7 @@ ob_start();
 ?>
 
     <h1>Категории</h1>
-    <a href="//<?= APP_BASE_PATH ?>/todo/category/create" class="btn btn-create">Create category</a>
+    <a href="//<?= APP_BASE_PATH ?>/todo/category/create" class="btn btn-create">Создать категорию</a>
     <table class="table">
         <thead>
         <tr>

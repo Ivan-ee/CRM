@@ -23,23 +23,11 @@ ob_start();
             </div>
             <div >
                 <label for="finish_date">Дата окончания</label>
-                <input type="text" id="finish_date" name="finish_date" >
+                <input type="date" id="finish_date" name="finish_date" >
             </div>
         </div>
         <button type="submit" class="btn btn-create">Создать задачу</button>
     </form>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function(){
-            flatpickr("#finish_date",{
-                enableTime: true,
-                noCalendar: false,
-                dateFormat: "Y-m-d H:00:00",
-                time_24hr: true,
-                minuteIncrement: 60
-            });
-        });
-    </script>
 
 <?php $content = ob_get_clean();
 

@@ -33,8 +33,8 @@ class AuthController
             $userModel = new AuthModel();
             $userModel->register($username, $email, $password);
         }
-        $path = '//' . APP_BASE_PATH;
-        header("Location: $path . '/auth/login'");
+        $path = '//' . APP_BASE_PATH . '/auth/login';
+        header("Location: $path");
     }
 
 

@@ -22,7 +22,6 @@ class Database{
         }
     }
 
-    // Возвращает сам объект класса Database
     public static function getInstance() {
         if (!isset(self::$instance)){
             self::$instance = new self();
@@ -30,7 +29,6 @@ class Database{
         return self::$instance;
     }
 
-    // возвращает объект подлючения к бд
     public function getConnection() {
         return $this->conn;
     }
