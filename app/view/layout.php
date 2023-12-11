@@ -3,6 +3,9 @@
 <head>
     <title><?= $title ?></title>
     <link rel="stylesheet" href="//<?= APP_BASE_PATH ?>/app/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
 </head>
 <body>
 <div>
@@ -55,11 +58,6 @@
                 <li>
                     <a href="//<?= APP_BASE_PATH ?>/todo/category">
                         Category
-                    </a>
-                </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/task">
-                        Task
                     </a>
                 </li>
             </ul>
