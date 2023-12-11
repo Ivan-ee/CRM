@@ -1,17 +1,17 @@
 <?php
 
-$title = 'Todo list';
+$title = 'Список задач';
 ob_start();
 
 
 ?>
 
-<h1 class="mb-4">Todo List</h1>
-<div class="d-flex justify-content-around row filter-priority">
-    <a data-priority="low" class="btn mb-3 col-2 sort-btn" style="background: #51A5F4">Low</a>
-    <a data-priority="medium" class="btn mb-3 col-2 sort-btn" style="background: #3C7AB5">Medium</a>
-    <a data-priority="high" class="btn mb-3 col-2 sort-btn" style="background: #274F75">High</a>
-    <a data-priority="urgent" class="btn mb-3 col-2 sort-btn" style="background: #122436">Urgent</a>
+<h1>Список задач</h1>
+<div class="filter-priority">
+    <a data-priority="low" class="btn" style="background: #51A5F4">Low</a>
+    <a data-priority="medium" class="btn " style="background: #3C7AB5">Medium</a>
+    <a data-priority="high" class="btn " style="background: #274F75">High</a>
+    <a data-priority="urgent" class="btn " style="background: #122436">Urgent</a>
 </div>
 <div class="accordion" id="tasks-accordion">
     <?php foreach ($tasks as $oneTask): ?>
@@ -32,36 +32,34 @@ ob_start();
                 break;
         }
         ?>
-        <div class="accordion-item mb-2">
-            <div class="accordion-header d-flex justify-content-between align-items-center row" id="task-<?php echo $oneTask['id']; ?>">
-                <h2 class="accordion-header col-12 col-md-6">
-                    <button style="background: <?=$priorityColor?>;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#task-collapse-<?php echo $oneTask['id']; ?>" aria-expanded="false" aria-controls="task-collapse-<?php echo $oneTask['id']; ?>" data-priority="<?php echo $oneTask['priority']; ?>">
-                        <span class="col-12 col-md-5"><i class="fa-solid fa-square-up-right"></i> <strong><?php echo $oneTask['title']; ?> </strong></span>
-                        <span class="col-5 col-md-3"><i class="fa-solid fa-person-circle-question"></i> <?php echo $oneTask['status']; ?> </span>
-                        <span class="col-5 col-md-3"><i class="fa-solid fa-hourglass-start"></i><span class="due-date"><?php echo $oneTask['finish_date']; ?></span></span>
-                    </button>
-                </h2>
-            </div>
-            <div id="task-collapse-<?php echo $oneTask['id']; ?>" class="accordion-collapse collapse row" aria-labelledby="task-<?php echo $oneTask['id']; ?>" data-bs-parent="#tasks-accordion">
-                <div class="accordion-body">
-                    <p class="row">
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-layer-group"></i> Category:</strong> <?php echo htmlspecialchars($oneTask['category']['title'] ?? 'N/A'); ?></span>
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-battery-three-quarters"></i> Status:</strong> <?php echo htmlspecialchars($oneTask['status']); ?></span>
-                    </p>
-                    <p class="row">
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-person-circle-question"></i> Priority:</strong> <?php echo htmlspecialchars($oneTask['priority']); ?></span>
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-hourglass-start"></i> Due Date:</strong> <?php echo htmlspecialchars($oneTask['finish_date']); ?></span>
-                    </p>
-                    <p><strong><i class="fa-solid fa-file-prescription"></i> Tags:</strong>
-                        <?php foreach ($oneTask['tags'] as $tag): ?>
-                            <a href="//<?= APP_BASE_PATH ?>/todo/task/by-tag/<?= $tag['id'] ?>" class="tag"><?= htmlspecialchars($tag['name']) ?></a>
-                        <?php endforeach; ?>
-                    </p>
-                    <p>
-                        <strong><i class="fa-solid fa-file-prescription"></i> Description:</strong> <em><?php echo htmlspecialchars($oneTask['description'] ?? ''); ?></em>
-                    </p>
-                    <hr>
-                    <div class="d-flex justify-content-start action-task">
+
+        <div class="cart-item">
+
+            <h2>
+                <span><strong><?php echo $oneTask['title']; ?> </strong></span>
+                <span> <?php echo $oneTask['status']; ?> </span>
+                <span><span class="due-date"><?php echo $oneTask['finish_date']; ?></span></span>
+            </h2>
+
+            <div class="cart-body">
+                <p>
+                    <span><strong>Категория:</strong> <?php echo $oneTask['category']['title'] ?? 'N/A'; ?></span>
+                    <span><strong>Статус:</strong> <?php echo $oneTask['status']; ?></span>
+                </p>
+                <p>
+                    <span style="background: <?=$priorityColor?>;"><strong>Приоритет:</strong> <?php echo $oneTask['priority']; ?></span>
+                    <span><strong>Дата окончания:</strong> <?php echo $oneTask['finish_date']; ?></span>
+                </p>
+                <p><strong>Теги:</strong>
+                    <?php foreach ($oneTask['tags'] as $tag): ?>
+                        <a href="//<?= APP_BASE_PATH ?>/todo/task/by-tag/<?= $tag['id'] ?>" class="tag"><?= $tag['name'] ?></a>
+                    <?php endforeach; ?>
+                </p>
+                <p>
+                    <strong>Описание:</strong> <em><?php echo $oneTask['description'] ?? ''; ?></em>
+                </p>
+                <hr>
+                <div class="cart-task">
 
                         <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="POST" class="me-2">
                             <input type="hidden" name="status" value="cancelled">
@@ -84,12 +82,12 @@ ob_start();
                             <button type="submit" class="btn <?=$oneTask['status'] == 'completed' ? 'btn-dark' : 'btn-secondary';?>">Completed</button>
                         </form>
 
-                        <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $oneTask['id']; ?>" class="btn btn-primary me-2">Edit</a>
-                        <a href="//<?= APP_BASE_PATH ?>/todo/task/delete/<?php echo $oneTask['id']; ?>" class="btn btn-danger me-2">Delete</a>
-                    </div>
-
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $oneTask['id']; ?>" class="btn btn-edit">Редактировать</a>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/delete/<?php echo $oneTask['id']; ?>" class="btn btn-delete">Удалить</a>
                 </div>
+
             </div>
+
         </div>
     <?php endforeach; ?>
 </div>

@@ -1,4 +1,3 @@
-// Обновление даты до истечения срока задачи в заголовке акордеона
 function updateRemainingTime() {
     const dueDateElements = document.querySelectorAll('.due-date');
     const now = new Date();
@@ -20,10 +19,9 @@ function updateRemainingTime() {
 }
 
 updateRemainingTime();
-setInterval(updateRemainingTime, 60000); // Update every minute
+setInterval(updateRemainingTime, 60000);
 
 
-// Сортировка задач по приоритетам для страниц index, completed, expired
 document.addEventListener('DOMContentLoaded', function() {
     const sortButtons = document.querySelectorAll('.sort-btn');
 

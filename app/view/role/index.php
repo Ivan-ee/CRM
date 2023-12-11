@@ -1,20 +1,20 @@
 <?php
 
-$title = 'Roles';
+$title = 'Роли';
 
 ob_start();
 
 ?>
 
-    <h1>Roles</h1>
+    <h1>Роли</h1>
     <table class="table">
 
         <thead>
         <tr>
             <th >ID</th>
-            <th >Role name</th>
-            <th >Role description</th>
-            <th >Action</th>
+            <th >Название</th>
+            <th >Описание</th>
+            <th >Действие</th>
         </tr>
         </thead>
 
@@ -25,8 +25,8 @@ ob_start();
                 <td><?php echo $role['role_name']; ?></td>
                 <td><?php echo $role['role_description']; ?></td>
                 <td>
-                    <a href="//<?= APP_BASE_PATH ?>/role/edit/<?php echo $role['id']; ?>" >Edit</a>
-                    <a href="//<?= APP_BASE_PATH ?>/role/delete/<?php echo $role['id']; ?>">Delete</a>
+                    <a class="btn btn-edit" href="//<?= APP_BASE_PATH ?>/role/edit/<?php echo $role['id']; ?>" >Редактировать</a>
+                    <a class="btn btn-delete" href="//<?= APP_BASE_PATH ?>/role/delete/<?php echo $role['id']; ?>">Удалить</a>
                 </td>
             </tr>
         <?php endforeach; ?>

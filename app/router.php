@@ -40,17 +40,13 @@ class Router
                 $controller = "controller\\" . $route['controller'];
                 $action = $route['action'] ?? $matches['action'] ?? 'index';
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-                var_dump($params);
+//                var_dump($params);
                 break;
             }
         }
 
-//        var_dump($params);
-        var_dump($controller);
-
         if (!$controller) {
             http_response_code(404);
-            var_dump($params);
             echo "Page not found!";
             return;
         }

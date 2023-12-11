@@ -28,7 +28,6 @@ class TaskController{
 
         $categoryModel = new CategoryModel();
 
-        // Получение списка тегов для каждой записи в массиве
         foreach($tasks as &$task){
             $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
@@ -47,7 +46,6 @@ class TaskController{
 
         $categoryModel = new CategoryModel();
 
-        // Получение списка тегов для каждой записи в массиве
         foreach($completedTasks as &$task){
             $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
@@ -66,7 +64,6 @@ class TaskController{
 
         $categoryModel = new CategoryModel();
 
-        // Получение списка тегов для каждой записи в массиве
         foreach($expiredTasks as &$task){
             $task['tags'] = $this->tagsModel->getTagsByTaskId($task['id']);
             $task['category'] = $categoryModel->getCategoryById($task['category_id']);
@@ -89,9 +86,9 @@ class TaskController{
         $this->check->requirePermission();
 
         if(isset($_POST['title']) && isset($_POST['category_id']) && isset($_POST['finish_date'])){
-            $data['title'] = trim($_POST['title']);
-            $data['category_id'] = trim($_POST['category_id']);
-            $data['finish_date'] = trim($_POST['finish_date']);
+            $data['title'] = $_POST['title'];
+            $data['category_id'] = $_POST['category_id'];
+            $data['finish_date'] = $_POST['finish_date'];
             $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
             $data['status'] = 'new';
             $data['priority'] = 'low';
@@ -128,14 +125,14 @@ class TaskController{
         $this->check->requirePermission();
 
         if(isset($_POST['id']) && isset($_POST['title']) && isset($_POST['category_id']) && isset($_POST['finish_date'])){
-            $data['id'] = trim($_POST['id']);
-            $data['title'] = trim($_POST['title']);
-            $data['category_id'] = trim($_POST['category_id']);
-            $data['finish_date'] = trim($_POST['finish_date']);
-            $data['reminder_at'] = trim($_POST['reminder_at']);
-            $data['status'] = trim($_POST['status']);
-            $data['priority'] = trim($_POST['priority']);
-            $data['description']  = trim($_POST['description']);
+            $data['id'] = $_POST['id'];
+            $data['title'] = $_POST['title'];
+            $data['category_id'] = $_POST['category_id'];
+            $data['finish_date'] = $_POST['finish_date'];
+            $data['reminder_at'] = $_POST['reminder_at'];
+            $data['status'] = $_POST['status'];
+            $data['priority'] = $_POST['priority'];
+            $data['description']  = $_POST['description'];
             $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
 
             // Обработка даты окончания и напоминания
@@ -167,7 +164,6 @@ class TaskController{
             $reminder_at = $finish_date->sub($interval);
             $data['reminder_at'] = $reminder_at->format('Y-m-d\TH:i');
 
-            // обновляем данные по задаче в базе
             $taskModel = new TaskModel();
             $taskModel->updateTask($data);
 

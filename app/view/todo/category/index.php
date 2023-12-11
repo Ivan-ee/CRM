@@ -1,19 +1,19 @@
 <?php
 
-$title = 'Todo Category';
+$title = 'КАтегории';
 ob_start();
 ?>
 
-    <h1 class="mb-4">Todo Category</h1>
-    <a href="//<?= APP_BASE_PATH ?>/todo/category/create" class="btn btn-success">Create category</a>
+    <h1>Категории</h1>
+    <a href="//<?= APP_BASE_PATH ?>/todo/category/create" class="btn btn-create">Create category</a>
     <table class="table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Usability</th>
-            <th>Action</th>
+            <th>Заголовок</th>
+            <th>Описание</th>
+            <th>Активная</th>
+            <th>Дейвтсвие</th>
         </tr>
         </thead>
         <tbody>
@@ -24,10 +24,8 @@ ob_start();
                 <td><?= $category['description'] ?></td>
                 <td><?= $category['usability'] == 1 ? 'Yes' : 'No' ?></td>
                 <td>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/category/edit/<?= $category['id'] ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <form method="POST" action="//<?= APP_BASE_PATH ?>/todo/category/delete/<?= $category['id'] ?>" class="d-inline-block">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/category/edit/<?= $category['id'] ?>" class="btn btn-edit">Редактировать</a>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/category/delete/<?= $category['id'] ?>" class="btn btn-delete" onclick="return confirm('Вы уверенны?')">Удалить</a>
                 </td>
             </tr>
         <?php endforeach; ?>

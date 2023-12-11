@@ -8,62 +8,65 @@
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.5/index.global.min.js'></script>
 </head>
 <body>
-<div>
-    <nav>
-        <a href="//<?= APP_BASE_PATH ?>">CRM</a>
+
+<div class="flex-container">
+    <nav class="sidebar">
+        <div class="name">
+            <a href="//<?= APP_BASE_PATH ?>">CRM</a>
+        </div>
         <div>
             <ul>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/user">Users</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/user">Пользователи</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/page">Pages</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/page">Страницы</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/role">All Roles</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/role">Все роли</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/role/create">Create Role</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/role/create">Создать роль</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/register">Register</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/auth/register">Регистрация</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/auth/login">Login</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/auth/login">Вход</a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/logout">Logout</a>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/auth/logout">Выход</a>
                 </li>
-                <h4>To do list</h4>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/task/create" class="nav-link text-white">
-                        Create task
+                <h4 class="sidebar-header">Список задач</h4>
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/create">
+                        Создать задачу
                     </a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/task" class="nav-link text-white">
-                        Tasks (opened)
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task">
+                        Задачи - открытые
                     </a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/task/completed" class="nav-link text-white">
-                        Tasks (completed)
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/completed">
+                        Задачи - выполненные
                     </a>
                 </li>
-                <li>
-                    <a href="//<?= APP_BASE_PATH ?>/todo/task/expired" class="nav-link text-white">
-                        Tasks (expired)
+                <li class="sidebar-element">
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/expired">
+                        Задачи - просроченные
                     </a>
                 </li>
-                <li>
+                <li class="sidebar-element">
                     <a href="//<?= APP_BASE_PATH ?>/todo/category">
-                        Category
+                        Категории
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div>
+    <div class="main">
         <?php echo $content; ?>
     </div>
 

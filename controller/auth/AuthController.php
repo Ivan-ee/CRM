@@ -3,46 +3,40 @@
 namespace controller\auth;
 
 use model\auth\AuthModel;
-use model\check\CheckModel;
 
 class AuthController
 {
-    private $check;
 
-    public function __construct() {
-        $userRole = $_SESSION['user_role'] ?? null;
-        $this->check = new CheckModel($userRole);
-    }
-
-    public function index()
+    public function register()
     {
         include 'app/view/auth/register.php';
     }
 
     public function store()
     {
-        if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['confirm_password']) && isset($_POST['email'])) {
+        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
             $password = $_POST['password'];
             $confirm_password = $_POST['confirm_password'];
 
-            if ($password !== $confirm_password) {
-                echo "Пароли не совпадают";
+            if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
+                echo "All fields are required";
                 return;
             }
 
-            $authModel = new AuthModel();
-            $data = [
-                'username' => $_POST['username'],
-                'email' => $_POST['email'],
-                'password' => $_POST['password']
-            ];
+            if ($password !== $confirm_password) {
+                echo "Passwords do not match";
+                return;
+            }
 
-            $authModel->register($data['username'], $data['email'], $data['password']);
+            $userModel = new AuthModel();
+            $userModel->register($username, $email, $password);
         }
-
-        $path = '//' . APP_BASE_PATH . '/auth/login';
-        header("Location: $path");
+        $path = '//' . APP_BASE_PATH;
+        header("Location: $path . '/auth/login'");
     }
+
 
     public function login()
     {
@@ -66,27 +60,27 @@ class AuthController
                 $_SESSION['user_role'] = $user['role'];
                 $_SESSION['user_email'] = $user['email'];
 
-                if ($remember == 'on'){
-                    setcookie('user_email', $email, time() + (7*24*60*60), '/');
-                    setcookie('user_password', $password, time() + (7*24*60*60), '/');
+                if ($remember == 'on') {
+                    setcookie('user_email', $email, time() + (7 * 24 * 60 * 60), '/');
+                    setcookie('user_password', $password, time() + (7 * 24 * 60 * 60), '/');
                 }
 
-                echo "Вы успешно вошли";
-
-                $path = '//' . APP_BASE_PATH ;
+                $path = '//' . APP_BASE_PATH;
                 header("Location: $path");
             } else {
-                echo "Неверный пароль или почта.";
+                echo "Invalid email or password";
             }
         }
     }
+
 
     public function logout()
     {
         session_start();
         session_unset();
         session_destroy();
-        header("Location: index.php");
+        $path = '//' . APP_BASE_PATH;
+        header("Location: $path");
     }
-}
 
+}

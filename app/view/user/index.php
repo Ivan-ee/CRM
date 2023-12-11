@@ -7,19 +7,20 @@ ob_start();
 ?>
 
 <h1>User list</h1>
-<a href="//<?= APP_BASE_PATH ?>/user/create">Create User</a>
+<a class="btn btn-create" href="//<?= APP_BASE_PATH ?>/user/create">Create User</a>
 <table class="table">
 
 <thead>
 <tr>
-    <th scope="col">#</th>
-    <th scope="col">Username</th>
-    <th scope="col">Email</th>
-    <th scope="col">Email verification</th>
-    <th scope="col">Is admin</th>
-    <th scope="col">Role</th>
-    <th scope="col">Is active</th>
-    <th scope="col">Last login</th>
+    <th>#</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Email verification</th>
+    <th>Is admin</th>
+    <th>Role</th>
+    <th>Is active</th>
+    <th>Last login</th>
+    <th>Action</th>
 </tr>
 </thead>
 
@@ -34,9 +35,9 @@ ob_start();
     <td><?php echo $user['role']; ?></td>
     <td><?php echo $user['is_active'] ? 'Yes' : 'No'; ?></td>
     <td><?php echo $user['last_login']; ?></td>
-    <td>
-        <a href="//<?= APP_BASE_PATH ?>/user/edit/<?php echo $user['id']; ?>" >Edit</a>
-        <a href="//<?= APP_BASE_PATH ?>/user/delete/<?php echo $user['id']; ?>">Delete</a>
+    <td class="">
+        <a class="btn btn-edit" href="//<?= APP_BASE_PATH ?>/user/edit/<?php echo $user['id']; ?>" >Edit</a>
+        <a class="btn btn-delete" href="//<?= APP_BASE_PATH ?>/user/delete/<?php echo $user['id']; ?>">Delete</a>
     </td>
 </tr>
 <?php endforeach; ?>

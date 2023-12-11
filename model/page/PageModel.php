@@ -113,7 +113,7 @@ class PageModel
 
     public function deletePage($id)
     {
-        $query = " DELETE FROM pages WHERE id = ?";
+        $query = "DELETE FROM pages WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);

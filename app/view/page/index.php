@@ -1,19 +1,19 @@
 <?php
 
-$title = 'Pages';
+$title = 'Страницы';
 ob_start();
 ?>
 
-    <h1 class="mb-4">Pages</h1>
-    <a href="//<?= APP_BASE_PATH ?>/page/create" class="btn btn-success">Create page</a>
+    <h1 class="mb-4">Страницы</h1>
+    <a href="//<?= APP_BASE_PATH ?>/page/create" class="btn btn-create">Create page</a>
     <table class="table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Slug</th>
-            <th>Role</th>
-            <th>Action</th>
+            <th>Заголовок</th>
+            <th>Слаг</th>
+            <th>Роли</th>
+            <th>Действие</th>
         </tr>
         </thead>
         <tbody>
@@ -24,10 +24,8 @@ ob_start();
                 <td><?= $page['slug'] ?></td>
                 <td><?= $page['role'] ?></td>
                 <td>
-                    <a href="//<?= APP_BASE_PATH ?>/page/edit/<?= $page['id'] ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                    <form method="POST" action="//<?= APP_BASE_PATH ?>/page/delete/<?= $page['id'] ?>" class="d-inline-block">
-                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                    </form>
+                    <a href="//<?= APP_BASE_PATH ?>/page/edit/<?= $page['id'] ?>" class="btn btn-edit">Редактировать</a>
+                    <a href="//<?= APP_BASE_PATH ?>/page/delete/<?= $page['id'] ?>" class="btn btn-delete" onclick="return confirm('Are you sure?')">Удалить</a>
                 </td>
             </tr>
         <?php endforeach; ?>

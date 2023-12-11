@@ -14,38 +14,32 @@ ob_start();
 <?php $path = '//'. APP_BASE_PATH . '/todo/task/task/'; ?>
 
     <script>
-        // Получение данных о задачах, из нашего PHP-контроллера
         const tasksJson = <?= json_encode($tasksJson) ?>;
-        const tasks = JSON.parse(tasksJson); // tasks это массив объектов
-        // Преобразование данных (массива) в задачи для календаря
+        const tasks = JSON.parse(tasksJson);
+
         const events = tasks.map((task) => {
             return {
                 title: task.title,
-                start: new Date(task.created_at), // Используйте created_at вместо start_date
-                end: new Date(task.finish_date), // Используйте finish_date вместо end_date
+                start: new Date(task.created_at),
+                end: new Date(task.finish_date),
                 extendedProps: {
-                    task_id: task.id, // добавьте ID задачи в расширенные свойства
+                    task_id: task.id,
                 },
             };
         });
 
-        // Обработчик событий загрузки DOM
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
 
-            // Инициализация календаря с настройками
             const calendar = new FullCalendar.Calendar(calendarEl, {
-                // initialView: 'dayGridMonth',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth',
                 themeSystem: 'bootstrap5',
-                events: events, // Задачи в виде событий на календаре
+                events: events,
                 eventClick: function (info) {
                     const taskId = info.event.extendedProps.task_id;
 
-                    // URL для  адреса страницы конкретной задачи
                     const taskUrl = `<?=$path;?>${taskId}`;
 
-                    //переход на страницу задачи
                     window.location.href = taskUrl;
                 },
             });

@@ -30,62 +30,61 @@ ob_start();
                 break;
         }
         ?>
-        <div class="accordion-item mb-2">
-            <div class="accordion-header d-flex justify-content-between align-items-center row" id="task-<?php echo $oneTask['id']; ?>">
-                <h2 class="accordion-header col-12 col-md-6">
-                    <button style="background: <?=$priorityColor?>;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#task-collapse-<?php echo $oneTask['id']; ?>" aria-expanded="false" aria-controls="task-collapse-<?php echo $oneTask['id']; ?>" data-priority="<?php echo $oneTask['priority']; ?>">
-                        <span class="col-12 col-md-5"><i class="fa-solid fa-square-up-right"></i> <strong><?php echo $oneTask['title']; ?> </strong></span>
-                        <span class="col-5 col-md-3"><i class="fa-solid fa-person-circle-question"></i> <?php echo $oneTask['status']; ?> </span>
-                        <span class="col-5 col-md-3"><i class="fa-solid fa-hourglass-start"></i><span class="due-date"><?php echo $oneTask['finish_date']; ?></span></span>
-                    </button>
-                </h2>
-            </div>
-            <div id="task-collapse-<?php echo $oneTask['id']; ?>" class="accordion-collapse collapse row" aria-labelledby="task-<?php echo $oneTask['id']; ?>" data-bs-parent="#tasks-accordion">
-                <div class="accordion-body">
-                    <p class="row">
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-layer-group"></i> Category:</strong> <?php echo htmlspecialchars($oneTask['category']['title'] ?? 'N/A'); ?></span>
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-battery-three-quarters"></i> Status:</strong> <?php echo htmlspecialchars($oneTask['status']); ?></span>
-                    </p>
-                    <p class="row">
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-person-circle-question"></i> Priority:</strong> <?php echo htmlspecialchars($oneTask['priority']); ?></span>
-                        <span class="col-12 col-md-6"><strong><i class="fa-solid fa-hourglass-start"></i> Due Date:</strong> <?php echo htmlspecialchars($oneTask['finish_date']); ?></span>
-                    </p>
-                    <p><strong><i class="fa-solid fa-file-prescription"></i> Tags:</strong>
-                        <?php foreach ($oneTask['tags'] as $tag): ?>
-                            <a href="//<?= APP_BASE_PATH ?>/todo/task/by-tag/<?= $tag['id'] ?>" class="tag"><?= htmlspecialchars($tag['name']) ?></a>
-                        <?php endforeach; ?>
-                    </p>
-                    <p>
-                        <strong><i class="fa-solid fa-file-prescription"></i> Description:</strong> <em><?php echo htmlspecialchars($oneTask['description'] ?? ''); ?></em>
-                    </p>
-                    <hr>
-                    <div class="d-flex justify-content-start action-task">
-                        <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="POST" class="me-2">
-                            <input type="hidden" name="status" value="cancelled">
-                            <button type="submit" class="btn <?=$oneTask['status'] == 'cancelled' ? 'btn-dark' : 'btn-secondary';?>">Cancelled</button>
-                        </form>
-                        <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                            <input type="hidden" name="status" value="new">
-                            <button type="submit" class="btn <?=$oneTask['status'] == 'new' ? 'btn-dark' : 'btn-secondary';?>">New</button>
-                        </form>
-                        <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                            <input type="hidden" name="status" value="in_progress">
-                            <button type="submit" class="btn <?=$oneTask['status'] == 'in_progress' ? 'btn-dark' : 'btn-secondary';?>">In progress</button>
-                        </form>
-                        <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                            <input type="hidden" name="status" value="on_hold">
-                            <button type="submit" class="btn <?=$oneTask['status'] == 'on_hold' ? 'btn-dark' : 'btn-secondary';?>">On hold</button>
-                        </form>
-                        <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post" class="me-2">
-                            <input type="hidden" name="status" value="completed">
-                            <button type="submit" class="btn <?=$oneTask['status'] == 'completed' ? 'btn-dark' : 'btn-secondary';?>">Completed</button>
-                        </form>
-                        <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $oneTask['id']; ?>" class="btn btn-primary me-2">Edit</a>
-                        <a href="//<?= APP_BASE_PATH ?>/todo/task/delete/<?php echo $oneTask['id']; ?>" class="btn btn-danger me-2">Delete</a>
-                    </div>
+        <div class="cart-item">
 
+            <h2>
+                <span><strong><?php echo $oneTask['title']; ?> </strong></span>
+                <span> <?php echo $oneTask['status']; ?> </span>
+                <span><span class="due-date"><?php echo $oneTask['finish_date']; ?></span></span>
+            </h2>
+
+            <div class="cart-body">
+                <p>
+                    <span><strong>Категория:</strong> <?php echo $oneTask['category']['title'] ?? 'N/A'; ?></span>
+                    <span><strong>Статус:</strong> <?php echo $oneTask['status']; ?></span>
+                </p>
+                <p>
+                    <span style="background: <?=$priorityColor?>;"><strong>Приоритет:</strong> <?php echo $oneTask['priority']; ?></span>
+                    <span><strong>Дата окончания:</strong> <?php echo $oneTask['finish_date']; ?></span>
+                </p>
+                <p><strong>Теги:</strong>
+                    <?php foreach ($oneTask['tags'] as $tag): ?>
+                        <a href="//<?= APP_BASE_PATH ?>/todo/task/by-tag/<?= $tag['id'] ?>" class="tag"><?= $tag['name'] ?></a>
+                    <?php endforeach; ?>
+                </p>
+                <p>
+                    <strong>Описание:</strong> <em><?php echo $oneTask['description'] ?? ''; ?></em>
+                </p>
+                <hr>
+                <div class="cart-task">
+
+                    <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="POST">
+                        <input type="hidden" name="status" value="cancelled">
+                        <button type="submit" class="btn <?=$oneTask['status'] == 'cancelled' ? 'btn-dark' : 'btn-secondary';?>">cancelled</button>
+                    </form>
+                    <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post">
+                        <input type="hidden" name="status" value="new">
+                        <button type="submit" class="btn <?=$oneTask['status'] == 'new' ? 'btn-dark' : 'btn-secondary';?>">new</button>
+                    </form>
+                    <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post">
+                        <input type="hidden" name="status" value="in_progress">
+                        <button type="submit" class="btn <?=$oneTask['status'] == 'in_progress' ? 'btn-dark' : 'btn-secondary';?>">in progress</button>
+                    </form>
+                    <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post">
+                        <input type="hidden" name="status" value="on_hold">
+                        <button type="submit" class="btn <?=$oneTask['status'] == 'on_hold' ? 'btn-dark' : 'btn-secondary';?>">on_hold</button>
+                    </form>
+                    <form action="//<?= APP_BASE_PATH ?>/todo/task/update-status/<?php echo $oneTask['id']; ?>" method="post">
+                        <input type="hidden" name="status" value="completed">
+                        <button type="submit" class="btn <?=$oneTask['status'] == 'completed' ? 'btn-dark' : 'btn-secondary';?>">completed</button>
+                    </form>
+
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/edit/<?php echo $oneTask['id']; ?>" class="btn btn-edit">Редактировать</a>
+                    <a href="//<?= APP_BASE_PATH ?>/todo/task/delete/<?php echo $oneTask['id']; ?>" class="btn btn-delete">Удалить</a>
                 </div>
+
             </div>
+
         </div>
     <?php endforeach; ?>
 </div>

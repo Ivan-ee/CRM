@@ -6,9 +6,9 @@ ob_start();
 
 ?>
 
+<h1>Изменение пользователя</h1>
 
-
-<form method="post" action="//<?= APP_BASE_PATH ?>/user/update/<?php echo $user['id']; ?>">
+<form class="form" method="post" action="//<?= APP_BASE_PATH ?>/user/update/<?php echo $user['id']; ?>">
     <div>
         <label for="username">username</label>
         <input type="text" id="username" name="username" value="<?php echo $user['username']; ?>" required>

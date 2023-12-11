@@ -95,7 +95,7 @@ class PageController
 
     public function delete($params)
     {
-        $this->check->requirePermission();
+//        $this->check->requirePermission();
 
         $pageModel = new PageModel();
         $pageModel->deletePage($params['id']);
