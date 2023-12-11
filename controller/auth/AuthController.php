@@ -21,17 +21,25 @@ class AuthController
             $confirm_password = $_POST['confirm_password'];
 
             if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
-                echo "All fields are required";
+                echo "ЗАполните все поля";
                 return;
             }
 
             if ($password !== $confirm_password) {
-                echo "Passwords do not match";
+                echo "пароли не совпадают";
                 return;
             }
 
-            $userModel = new AuthModel();
-            $userModel->register($username, $email, $password);
+            $authModel = new AuthModel();
+
+            $data = $authModel->findByEmail($email);
+
+            if ($data){
+                echo "Пользователь с таким email уже существует";
+                return;
+            }
+
+            $authModel->register($username, $email, $password);
         }
         $path = '//' . APP_BASE_PATH . '/auth/login';
         header("Location: $path");

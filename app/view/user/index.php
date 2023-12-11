@@ -36,7 +36,7 @@ ob_start();
     <td><?php echo $user['is_active'] ? 'Yes' : 'No'; ?></td>
     <td><?php echo $user['last_login']; ?></td>
     <td class="">
-        <a class="btn btn-edit" href="//<?= APP_BASE_PATH ?>/user/edit/<?php echo $user['id']; ?>" >Edit</a>
+        <a class="btn btn-edit" href="//<?= APP_BASE_PATH ?>/user/edit/<?php echo $user['id']; ?>">Edit</a>
         <a class="btn btn-delete" href="//<?= APP_BASE_PATH ?>/user/delete/<?php echo $user['id']; ?>">Delete</a>
     </td>
 </tr>

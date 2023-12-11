@@ -91,7 +91,10 @@ class TaskController{
             $data['finish_date'] = $_POST['finish_date'];
             $data['user_id'] = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
             $data['status'] = 'new';
+            $data['description'] = $_POST['description'];
             $data['priority'] = 'low';
+
+//            tte($data);
 
             $taskModel = new TaskModel();
             $taskModel->createTask($data);
@@ -200,10 +203,11 @@ class TaskController{
     public function delete($params){
         $this->check->requirePermission();
 
-        $todoCategoryModel = new CategoryModel();
-        $todoCategoryModel->deleteCategory($params['id']);
+        $taskModel = new TaskModel();
+        $taskModel->deleteTask($params['id']);
 
-        $path = '//'. APP_BASE_PATH . '/todo/category';
+
+        $path = '//'. APP_BASE_PATH . '/todo/task';
         header("Location: $path");
     }
 

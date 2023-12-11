@@ -23,8 +23,12 @@ ob_start();
             </div>
             <div >
                 <label for="finish_date">Дата окончания</label>
-                <input type="date" id="finish_date" name="finish_date" >
+                <input type="datetime-local" id="finish_date" name="finish_date" >
             </div>
+        </div>
+        <div>
+            <label for="description">Описание</label>
+            <textarea id="description" name="description" rows="3" required><?php echo $task['description'] ?? ''; ?></textarea>
         </div>
         <button type="submit" class="btn btn-create">Создать задачу</button>
     </form>

@@ -110,11 +110,11 @@ class TaskModel {
     public function createTask($data)
 
     {
-        $query = "INSERT INTO todo_list (user_id, title, category_id, status, priority, finish_date) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO todo_list (user_id, description, title, category_id, status, priority, finish_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$data['user_id'], $data['title'], $data['category_id'], $data['status'], $data['priority'], $data['finish_date']]);
+            $stmt->execute([$data['user_id'], $data['description'] ,$data['title'], $data['category_id'], $data['status'], $data['priority'], $data['finish_date']]);
             return true;
         } catch(\PDOException $e) {
             return false;
@@ -165,9 +165,9 @@ class TaskModel {
         }
     }
 
-    public function deleteCategory($id)
+    public function deleteTask($id)
     {
-        $query = "DELETE FROM todo_category WHERE id = ?";
+        $query = "DELETE FROM todo_list WHERE id = ?";
 
         try {
             $stmt = $this->database->prepare($query);
