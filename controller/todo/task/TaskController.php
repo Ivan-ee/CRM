@@ -163,6 +163,8 @@ class TaskController{
                     break;
             }
 
+//            tte($interval, $finish_date);
+
             $reminder_at = $finish_date->sub($interval);
             $data['reminder_at'] = $reminder_at->format('Y-m-d\TH:i');
 
