@@ -31,6 +31,12 @@ class Router
     public function run()
     {
         $uri = $_SERVER['REQUEST_URI'];
+
+        $basePath = '/CRM';
+        if (strpos($uri, $basePath) === 0) {
+            $uri = substr($uri, strlen($basePath));
+        }
+
         $controller = null;
         $action = null;
         $params = null;

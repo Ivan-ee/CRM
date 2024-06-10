@@ -11,7 +11,7 @@ function tte($str){
     echo "</pre>";
     exit();
 }
-// config.php
+
 
 const APP_BASE_PATH = 'crm';
 

@@ -3,7 +3,6 @@
 
 
 spl_autoload_register(function ($class) {
-    // Если класс является встроенным классом PHP, не обрабатываем его
     if (in_array($class, ['PDO', 'Exception', 'DateTime', 'DateInterval'])) {
         return;
     }
