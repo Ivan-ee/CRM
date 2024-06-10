@@ -13,11 +13,11 @@ function tte($str){
 }
 
 
-const APP_BASE_PATH = 'crm';
+const APP_BASE_PATH = 'localhost/CRM';
 
-const DB_HOST = 'localhost';
+const DB_HOST = '127.0.0.1';
 const DB_USER = 'root';
-const DB_PASS = '';
+const DB_PASS = 'root';
 const DB_NAME = 'CRM';
 
 const START_ROLE = 1;

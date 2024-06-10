@@ -46,7 +46,6 @@ class Router
                 $controller = "controller\\" . $route['controller'];
                 $action = $route['action'] ?? $matches['action'] ?? 'index';
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-//                var_dump($params);
                 break;
             }
         }
