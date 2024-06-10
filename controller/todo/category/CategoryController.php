@@ -33,7 +33,9 @@ class CategoryController
 
     public function store()
     {
-//        $this->check->requirePermission();
+        $this->check->requirePermission();
+
+        header('Content-Type: application/json');
 
         if (isset($_POST['title']) && isset($_POST['description'])) {
             $title = $_POST['title'];
@@ -41,11 +43,16 @@ class CategoryController
             $user_id = $_SESSION['user_id'] ?? 0;
 
             $categoryModel = new CategoryModel();
-            $categoryModel->createCategory($title, $description, $user_id);
-        }
+            $result = $categoryModel->createCategory($title, $description, $user_id);
 
-        $path = '//' . APP_BASE_PATH . '/todo/category';
-        header("Location: $path");
+            if ($result) {
+                echo json_encode(['status' => 'success', 'message' => 'Категория успешно создана!']);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Ошибка при создании категории.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Пожалуйста, заполните все поля.']);
+        }
     }
 
     public function edit($params)

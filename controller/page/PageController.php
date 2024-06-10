@@ -13,7 +13,6 @@ class PageController
 
     public function __construct() {
         $userRole = $_SESSION['user_role'] ?? null;
-
 //        tte($userRole);
         $this->check = new CheckModel($userRole);
     }
