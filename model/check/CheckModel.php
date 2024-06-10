@@ -16,7 +16,7 @@ class CheckModel
     public function getCurrentUrlSlug()
     {
         $url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
+        
 //        tt($url);
 
         $parsedUrl = parse_url($url);
