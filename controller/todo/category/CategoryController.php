@@ -45,8 +45,10 @@ class CategoryController
             $categoryModel = new CategoryModel();
             $result = $categoryModel->createCategory($title, $description, $user_id);
 
+            $message = sprintf('Категория "%s" с описанием "%s" успешно создана!', $title, $description);
+
             if ($result) {
-                echo json_encode(['status' => 'success', 'message' => 'Категория успешно создана!']);
+                echo json_encode(['status' => 'success', 'message' => $message]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Ошибка при создании категории.']);
             }

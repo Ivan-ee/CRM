@@ -5,7 +5,8 @@ ob_start();
 ?>
 
     <h1>Создание категории</h1>
-    <form class="form" method="POST" id="createCategoryForm"> <!--action="//<?php /*= APP_BASE_PATH */ ?>/todo/category/store"-->>
+    <form class="form" method="POST" id="createCategoryForm">
+        <!--action="//<?php /*= APP_BASE_PATH */ ?>/todo/category/store"-->>
         <div>
             <label for="title" class="form-label">Заголовок</label>
             <input type="text" class="form-control" id="title" name="title" required>
@@ -40,24 +41,23 @@ ob_start();
                     type: 'POST',
                     url: url,
                     data: formData,
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            $('#modalMessage').text(response.message);
-                        } else {
-                            $('#modalMessage').text(response.message);
-                        }
+                    success: function (response) {
+
+                        $('#modalMessage').text(response.message);
+
                         $('#categoryModal').show();
+
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         $('#modalMessage').text('Ошибка при создании категории.');
                         $('#categoryModal').show();
                     }
                 });
             });
 
-            // Закрытие модального окна
             $('.close').on('click', function () {
                 $('#categoryModal').hide();
+                location = 'http://localhost/CRM/todo/category'
             });
         });
 
