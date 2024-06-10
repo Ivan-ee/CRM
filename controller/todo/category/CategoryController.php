@@ -9,7 +9,8 @@ class CategoryController
 {
     private $check;
 
-    public function __construct() {
+    public function __construct()
+    {
         $userRole = $_SESSION['user_role'] ?? null;
         $this->check = new CheckModel($userRole);
     }
@@ -74,32 +75,64 @@ class CategoryController
 
     public function update($params)
     {
-//        $this->check->requirePermission();
+        $this->check->requirePermission();
+
+        header('Content-Type: application/json');
 
         if (isset($params['id']) && isset($_POST['title']) && isset($_POST['description'])) {
             $id = $params['id'];
             $title = $_POST['title'];
             $description = $_POST['description'];
-            $usability  = $_POST['usability'] ?? 0;
-
+            $usability = $_POST['usability'] ?? 0;
 
             $categoryModel = new CategoryModel();
-            $categoryModel->updateCategory($id, $title, $description, $usability);
-        }
+            $oldCategory = $categoryModel->getCategoryById($id);
 
-        $path = '//' . APP_BASE_PATH . '/todo/category';
-        header("Location: $path");
+            $result = $categoryModel->updateCategory($id, $title, $description, $usability);
+
+            if ($result) {
+                $message = sprintf(
+                    'Категория "%s" с описанием "%s" была обновлена на "%s" и "%s".',
+                    $oldCategory['title'],
+                    $oldCategory['description'],
+                    $title,
+                    $description
+                );
+                echo json_encode(['status' => 'success', 'message' => $message]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Ошибка при обновлении категории.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Пожалуйста, заполните все поля.']);
+        }
     }
 
     public function delete($params)
     {
         $this->check->requirePermission();
 
-        $categoryModel = new CategoryModel();
-        $categoryModel->deleteCategory($params['id']);
+        header('Content-Type: application/json');
 
-        $path = '//' . APP_BASE_PATH . '/todo/category';
-        header("Location: $path");
+        $categoryModel = new CategoryModel();
+        $category = $categoryModel->getCategoryById($params['id']);
+
+        if ($category) {
+            $result = $categoryModel->deleteCategory($params['id']);
+
+            if ($result) {
+                $message = sprintf(
+                    'Категория "%s" с описанием "%s" была удалена.',
+                    $category['title'],
+                    $category['description']
+                );
+                echo json_encode(['status' => 'success', 'message' => $message, 'id' => $params['id']]);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Ошибка при удалении категории.']);
+            }
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Категория не найдена.']);
+        }
     }
+
 }
 
