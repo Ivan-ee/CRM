@@ -30,15 +30,14 @@ class AuthModel
             `id` INT(6) NOT NULL AUTO_INCREMENT,
             `username` VARCHAR(255) NOT NULL,
             `email` VARCHAR(255) NOT NULL,
-            `email_verification` TINYINT(1) NOT NULL DEFAULT 0,
             `password` VARCHAR(255) NOT NULL,
             `is_admin` TINYINT(1) NOT NULL DEFAULT 0,
-            `role` INT(6) NOT NULL DEFAULT 0,
+            `role` INT(6) NOT NULL DEFAULT 5,
             `is_active` TINYINT(1) NOT NULL DEFAULT 1,
             `last_login` TIMESTAMP NULL,
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (`id`),
-            FOREIGN KEY (`role`) REFERENCES `role`(`id`)
+            FOREIGN KEY (`role`) REFERENCES `roles`(`id`)
         )";
 
         try {
@@ -52,13 +51,12 @@ class AuthModel
 
     public function register($username, $email, $password)
     {
-        $created_at = date('Y-m-d H:i:s');
 
-        $query = "INSERT INTO users (username, email, password, created_at) VALUES (?,?,?,?)";
+        $query = "INSERT INTO users (username, email, password) VALUES (?,?,?)";
 
         try {
             $stmt = $this->database->prepare($query);
-            $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT), $created_at]);
+            $stmt->execute([$username, $email, password_hash($password, PASSWORD_DEFAULT)]);
             return true;
         } catch (\PDOException $e) {
             return false;
