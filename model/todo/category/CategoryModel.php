@@ -77,6 +77,7 @@ class CategoryModel
         try {
             $stmt = $this->database->prepare($query);
             $stmt->execute([$title, $description, $user_id]);
+
             return true;
         } catch (\PDOException $e) {
             return false;

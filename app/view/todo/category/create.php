@@ -6,7 +6,7 @@ ob_start();
 
     <h1>Создание категории</h1>
     <form class="form" method="POST" id="createCategoryForm">
-        <!--action="//<?php /*= APP_BASE_PATH */ ?>/todo/category/store"-->>
+        <!--action="//<?php /*= APP_BASE_PATH */ ?>/todo/category/store"-->
         <div>
             <label for="title" class="form-label">Заголовок</label>
             <input type="text" class="form-control" id="title" name="title" required>

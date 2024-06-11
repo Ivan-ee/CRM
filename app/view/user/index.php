@@ -15,7 +15,6 @@ ob_start();
     <th>#</th>
     <th>Username</th>
     <th>Email</th>
-    <th>Email verification</th>
     <th>Is admin</th>
     <th>Role</th>
     <th>Is active</th>
@@ -30,7 +29,6 @@ ob_start();
     <td><?php echo $user['id']; ?></td>
     <td><?php echo $user['username']; ?></td>
     <td><?php echo $user['email']; ?></td>
-    <td><?php echo $user['email_verification']; ?></td>
     <td><?php echo $user['is_admin'] ? 'Yes' : 'No' ?></td>
     <td><?php echo $user['role']; ?></td>
     <td><?php echo $user['is_active'] ? 'Yes' : 'No'; ?></td>
